@@ -1,0 +1,51 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+.python-version
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# Privadas / locales
+.claude/
+*.local
+
+# Configuración con credenciales — NO commitear jamás
+config.js
+config.local.js
+.env
+.env.*
+supabase/.env
+
+# Herramientas de desarrollo — no van al sitio público
+_tools/
+agents/
+awesome-design-md/
+enlaces/
+superpowers/
+
+# Archivos de prueba / generados localmente
+run_chrome_test.js
+test_pdf.html
+test_pdf_creation.js
+simbolo_b64.txt
+ticket_frames_b64.js
+
+# Backups originales (pesados, ya respaldados aparte)
+_originals/
+
+# Archivos temporales
+*.tmp
+*.swp
+*.bak
+
+# Reportes generados
+_tools/image_report.json

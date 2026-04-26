@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>StarSeed · Staging — Galería de Boletos</title>
+<style>
+  *,*::before,*::after{ box-sizing:border-box; }
+  :root{
+    --bg:#05060d; --panel:#0a0d1a; --line:#1a1f33;
+    --gold:#fbbf24; --emerald:#10b981; --cyan:#06b6d4; --violet:#a78bfa;
+    --txt:#e6e9f5; --muted:#8b93a7;
+  }
+  html,body{ margin:0; padding:0; background:var(--bg); color:var(--txt);
+    font-family: 'Inter','Helvetica Neue',system-ui,sans-serif;
+    background-image:
+      radial-gradient(1200px 600px at 20% -10%, rgba(167,139,250,.10), transparent 60%),
+      radial-gradient(1000px 500px at 80% 110%, rgba(16,185,129,.10), transparent 60%);
+  }
+  header{ padding:34px 28px 18px; border-bottom:1px solid var(--line);
+    background:rgba(10,13,26,0.72); backdrop-filter:blur(8px); position:sticky; top:0; z-index:50; }
+  h1{ font:700 22px/1.2 'Orbitron','Helvetica Neue',sans-serif; margin:0 0 6px;
+    background:linear-gradient(90deg,#fbbf24,#34d399,#22d3ee); -webkit-background-clip:text; color:transparent;
+    letter-spacing:.04em; }
+  header p{ margin:0; color:var(--muted); font-size:13px; max-width:62ch; }
+  .controls{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; align-items:center; }
+  .btn{ background:linear-gradient(135deg,#10b981,#06b6d4); color:#04101a; border:0;
+    padding:9px 16px; border-radius:10px; cursor:pointer; font:600 13px/1 'Orbitron',sans-serif;
+    letter-spacing:.06em; box-shadow:0 4px 18px rgba(16,185,129,.25); }
+  .btn:hover{ transform:translateY(-1px); box-shadow:0 6px 22px rgba(16,185,129,.35); }
+  .btn.ghost{ background:transparent; color:var(--txt); border:1px solid var(--line); box-shadow:none; }
+  .btn.ghost:hover{ border-color:var(--emerald); color:var(--emerald); }
+  select, input{ background:#0e1224; color:var(--txt); border:1px solid var(--line);
+    padding:8px 10px; border-radius:8px; font:500 13px/1 Inter,sans-serif; }
+  main{ padding:24px 28px 80px; }
+  .meta{ display:flex; gap:18px; flex-wrap:wrap; color:var(--muted); font-size:12px; margin-bottom:18px; }
+  .meta b{ color:var(--txt); font-weight:600; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(360px, 1fr)); gap:22px; }
+  .card{ background:var(--panel); border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    display:flex; flex-direction:column; transition:transform .22s ease, border-color .22s ease;
+    box-shadow:0 14px 38px rgba(0,0,0,.32); }
+  .card:hover{ transform:translateY(-3px); border-color:#2c3656; }
+  .card .head{ display:flex; align-items:center; justify-content:space-between;
+    padding:12px 14px; border-bottom:1px solid var(--line); }
+  .card .head h3{ font:700 13px/1 'Orbitron',sans-serif; margin:0; letter-spacing:.05em; }
+  .card .head small{ color:var(--muted); font-size:11px; }
+  .stage{ display:flex; align-items:center; justify-content:center; padding:14px;
+    background:repeating-linear-gradient(45deg,#0a0d1a,#0a0d1a 12px,#0c1023 12px,#0c1023 24px);
+    min-height:280px; position:relative; }
+  .stage img{ max-width:100%; max-height:520px; object-fit:contain; border-radius:8px;
+    box-shadow:0 8px 28px rgba(0,0,0,.55); display:block;
+    transition:opacity .3s ease, transform .5s ease; }
+  .stage img.back-side{ position:absolute; opacity:0; }
+  .stage.show-back .img-front{ opacity:0; }
+  .stage.show-back .img-back{ opacity:1; }
+  .stage.loading{ opacity:.45; }
+  .side-tabs{
+    display:flex; gap:4px; padding:6px 8px 0; background:#0a0d1a;
+    border-bottom:1px solid var(--line);
+  }
+  .side-tabs button{
+    flex:1; padding:6px 10px; background:transparent; border:0;
+    color:var(--muted); cursor:pointer; font:600 10px/1 'Orbitron',sans-serif;
+    letter-spacing:.1em; text-transform:uppercase; border-radius:6px 6px 0 0;
+    border-bottom:2px solid transparent;
+  }
+  .side-tabs button.active{
+    color:var(--gold); border-bottom-color:var(--gold);
+    background:rgba(251,191,36,.06);
+  }
+  .side-tabs button:hover{ color:var(--txt); }
+  .actions{ display:flex; gap:8px; padding:10px 14px; border-top:1px solid var(--line); }
+  .actions a, .actions button{ flex:1; text-align:center; background:transparent;
+    color:var(--cyan); border:1px solid #1c2541; border-radius:8px; padding:8px 6px;
+    font:600 11px/1 'Orbitron',sans-serif; letter-spacing:.06em; cursor:pointer; text-decoration:none; }
+  .actions a:hover, .actions button:hover{ border-color:var(--cyan); }
+  .note{ margin-top:6px; padding:10px 14px; color:var(--muted); font-size:12px; border-top:1px dashed var(--line); }
+  .note textarea{ width:100%; background:#0a0e1c; color:var(--txt); border:1px solid var(--line);
+    border-radius:8px; padding:8px 10px; font:500 12px/1.4 Inter,sans-serif; resize:vertical; min-height:54px; }
+  iframe{ position:fixed; left:-99999px; top:-99999px; width:600px; height:600px; visibility:hidden; }
+  .stat{ font-size:11px; color:var(--muted); }
+  .pill{ display:inline-block; padding:2px 8px; border-radius:99px; background:#11172a;
+    border:1px solid var(--line); font-size:10px; color:var(--muted); margin-left:6px; }
+  .ok{ color:#34d399; border-color:#1f5d4a; }
+  .warn{ color:#fbbf24; border-color:#5a4a1a; }
+</style>
+</head>
+<body>
+<header>
+  <h1>STAGING · Galería de Boletos StarSeed</h1>
+  <p>Vista de referencia <b>fuera</b> del programa oficial. Cada tarjeta renderiza el
+  boleto vía <code>TicketCanvas.generate()</code> con datos de ejemplo configurables.
+  Anota lo que quieras refinar de cada uno y luego se aplica al programa principal.</p>
+  <div class="controls">
+    <label>Datos de ejemplo:
+      <select id="presetSel">
+        <option value="long">Nombre largo (ALEXANDRO BORDONGARRIGOS)</option>
+        <option value="short">Nombre corto (LUNA)</option>
+        <option value="med">Nombre medio (DIANA SERRANO)</option>
+        <option value="poetic">Nombre poético + intención larga</option>
+      </select>
+    </label>
+    <label>Glyph:
+      <select id="glyphSel">
+        <option value="proc">Procedural (rápido)</option>
+        <option value="ai">IA Pollinations (lento)</option>
+      </select>
+    </label>
+    <button class="btn" id="btnRegen">Regenerar todos</button>
+    <button class="btn ghost" id="btnDl">Descargar todos como PNGs</button>
+    <button class="btn ghost" id="btnReload">Recargar iframe</button>
+    <span class="stat" id="stat"></span>
+  </div>
+  <div class="meta" id="meta"></div>
+</header>
+
+<main>
+  <div class="grid" id="grid"></div>
+</main>
+
+<iframe id="app" src="../index.html?staging=1"></iframe>
+
+<script>
+const PRESETS = {
+  long: {
+    name: 'ALEXANDRO BORDONGARRIGOS',
+    comment: 'Construir el arquetipo de la civilización consciente y sembrar la red de Sanghas.',
+    id: 'SS-A04F-7721',
+  },
+  short: {
+    name: 'LUNA',
+    comment: 'Tejer la red.',
+    id: 'SS-LUN-0001',
+  },
+  med: {
+    name: 'DIANA SERRANO',
+    comment: 'Caminar entre lo sagrado y lo cotidiano.',
+    id: 'SS-DS-1729',
+  },
+  poetic: {
+    name: 'MAGGASUKHA KUMBHAMĀKĀRA',
+    comment: 'Amor incondicional es vida; cada respiración es un manifiesto, cada paso un voto.',
+    id: 'SS-OM-9292',
+  },
+};
+
+// Lista canónica de roles (espejo de ROLES en index.html). Sirve para crear una
+// tarjeta por rol y aplicar el roleColor / roleLabel correctos.
+const ROLES = [
+  { id:'tech',  label:'Programador / Tecnólogo', frameCategory:'tech',     color:'#06b6d4' },
+  { id:'art',   label:'Artista / Diseñador',     frameCategory:'creative', color:'#ec4899' },
+  { id:'music', label:'Músico / Artista Sonoro', frameCategory:'music',    color:'#fbbf24' },
+  { id:'write', label:'Escritor / Periodista',   frameCategory:'writer',   color:'#e2e8f0' },
+  { id:'sci',   label:'Científico / Investigador', frameCategory:'science', color:'#22d3ee' },
+  { id:'biz',   label:'Inversor / Emprendedor',  frameCategory:'business', color:'#fbbf24' },
+  { id:'heal',  label:'Terapeuta / Sanador',     frameCategory:'healer',   color:'#10b981' },
+  { id:'edu',   label:'Educador / Mentor',       frameCategory:'educator', color:'#34d399' },
+  { id:'build', label:'Constructor / Arquitecto', frameCategory:'builder', color:'#f59e0b' },
+  { id:'comm',  label:'Comunicador / Activista', frameCategory:'social',   color:'#f472b6' },
+  { id:'agri',  label:'Agricultor / Permacultor', frameCategory:'nature',  color:'#22c55e' },
+  { id:'spirit',label:'Guía Espiritual / Coach', frameCategory:'spirit',   color:'#a78bfa' },
+  { id:'other', label:'Otro (especificar)',      frameCategory:'other',    color:'#fbbf24' },
+];
+
+const TICKET_FRAMES = {
+  tech:'ticket_tech.png', creative:'ticket_creative.png', nature:'ticket_nature.png',
+  spirit:'ticket_spirit.png', music:'ticket_music.png', builder:'ticket_build.png',
+  science:'ticket_science.png', business:'ticket_business.png',
+  social:'ticket_comm.png', writer:'ticket_writer.png',
+  // Reasignados al marco existente más resonante:
+  healer:'ticket_spirit.png',    // Terapeuta ↔ Guía Espiritual (energía sanadora)
+  educator:'ticket_writer.png',  // Educador  ↔ Escritor (transmisión del conocimiento)
+  other:'ticket_creative.png',   // Otro       ↔ Artista (marco abierto/versátil)
+};
+
+const grid = document.getElementById('grid');
+const meta = document.getElementById('meta');
+const stat = document.getElementById('stat');
+const presetSel = document.getElementById('presetSel');
+const glyphSel = document.getElementById('glyphSel');
+const iframe = document.getElementById('app');
+
+let appWin = null;
+let ready = false;
+
+// ── Serial render queue ────────────────────────────────────────────────────
+// Every renderCard call is funnelled through this promise chain so that
+// userData (shared mutable object) is never written by two renders at once.
+let _serialQ = Promise.resolve();
+function _enqueue(fn) {
+  const task = _serialQ.then(fn, fn); // run even if previous task threw
+  _serialQ = task.then(() => {}, () => {}); // keep chain alive on error
+  return task;
+}
+
+// Debounce for renderAll: if triggered rapidly, only the last call runs.
+let _regenTimer = null;
+function scheduleRenderAll() {
+  if (_regenTimer) clearTimeout(_regenTimer);
+  _regenTimer = setTimeout(() => { _regenTimer = null; renderAll(); }, 60);
+}
+
+function buildCards(){
+  grid.innerHTML = '';
+  ROLES.forEach((r) => {
+    const frame = TICKET_FRAMES[r.frameCategory] || 'ticket_spirit.png';
+    const card = document.createElement('section');
+    card.className = 'card';
+    card.dataset.roleId = r.id;
+    card.dataset.frame = frame;
+    const dupCount = ROLES.filter(rr => rr.frameCategory === r.frameCategory).length;
+    const dupBadge = dupCount > 1
+      ? `<span class="pill warn">marco compartido ×${dupCount}</span>`
+      : `<span class="pill ok">único</span>`;
+    card.innerHTML = `
+      <div class="head">
+        <h3>${r.label}${dupBadge}</h3>
+        <small>${frame}</small>
+      </div>
+      <div class="side-tabs">
+        <button class="active" data-side="front">Frente</button>
+        <button data-side="back">Reverso · QRs · Entrada</button>
+      </div>
+      <div class="stage loading">
+        <img class="img-front" alt="ticket-${r.id}-frente" />
+        <img class="img-back back-side" alt="ticket-${r.id}-reverso" />
+      </div>
+      <div class="actions">
+        <button data-act="regen">Regenerar</button>
+        <a data-act="open" target="_blank">Abrir frente</a>
+        <a data-act="open-back" target="_blank">Abrir reverso</a>
+        <a data-act="dl" download="ticket_${r.id}.png">Descargar</a>
+      </div>
+      <div class="note">
+        <textarea placeholder="Notas para refinar este boleto…"></textarea>
+      </div>`;
+    grid.appendChild(card);
+    card.querySelector('[data-act="regen"]').addEventListener('click', () => renderCard(card));
+    // Side tabs handlers
+    card.querySelectorAll('.side-tabs button').forEach(b => {
+      b.addEventListener('click', () => {
+        const stage = card.querySelector('.stage');
+        const side = b.dataset.side;
+        stage.classList.toggle('show-back', side === 'back');
+        card.querySelectorAll('.side-tabs button').forEach(x =>
+          x.classList.toggle('active', x === b));
+      });
+    });
+  });
+}
+
+// Public entry-point: queues this card for serial rendering.
+function renderCard(card) {
+  return _enqueue(() => _doRenderCard(card));
+}
+
+// img.decode() hangs indefinitely on large data-URL images in Chrome
+// (complete=true but decode() promise never settles — Chromium quirk).
+// Use onload/complete pattern instead.
+function waitImg(img) {
+  if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+  return new Promise(r => {
+    img.onload  = r;
+    img.onerror = r; // don't stall on error either
+  });
+}
+
+async function _doRenderCard(card){
+  if (!appWin || !appWin.__STARSEED__) return;
+  const tc = appWin.__STARSEED__.TicketCanvas;
+  const tb = appWin.__STARSEED__.TicketBack;
+  if (glyphSel.value === 'proc') tc.fetchHieroglyph = async () => null;
+  const role = ROLES.find(r => r.id === card.dataset.roleId);
+  const preset = PRESETS[presetSel.value];
+  // NODE id único por boleto (criptográfico)
+  const nodeId = appWin.__STARSEED__.Registry.makeNodeId(role.id);
+
+  // ── CRITICAL SECTION ──────────────────────────────────────────────────
+  // userData() returns the SAME shared object every time. We write to it
+  // here and tc.generate() reads from it synchronously, so no other render
+  // may be running concurrently. The _enqueue wrapper guarantees this.
+  const ud = appWin.__STARSEED__.userData();
+  Object.assign(ud, {
+    name: preset.name,
+    comment: preset.comment,
+    id: nodeId,
+    roleId: role.id,
+    roleLabel: role.label,
+    roleLabels: [role.label],
+    roleColor: role.color,
+    colors: [role.color, '#06b6d4', '#fbbf24'],
+    frameFile: card.dataset.frame,
+    timestamp: new Date().toISOString(),
+  });
+  // ─────────────────────────────────────────────────────────────────────
+
+  const stage = card.querySelector('.stage');
+  stage.classList.add('loading');
+  try {
+    const t0 = performance.now();
+    // 1. Frente
+    const { dataUrl } = await tc.generate();
+    const ms = Math.round(performance.now() - t0);
+    const imF = card.querySelector('img.img-front');
+    imF.src = dataUrl;
+    await waitImg(imF);  // reliable for both data-URLs and blob URLs
+
+    // 2. Reverso (mismo userData — aún en la sección crítica serializada)
+    const back = await tb.generate(ud);
+    const imB = card.querySelector('img.img-back');
+    imB.src = back.dataUrl;
+    await waitImg(imB);
+
+    card.querySelector('[data-act="open"]').href = dataUrl;
+    card.querySelector('[data-act="open-back"]').href = back.dataUrl;
+    card.querySelector('[data-act="dl"]').href = dataUrl;
+    card.querySelector('.head small').textContent =
+      `${card.dataset.frame} · ${imF.naturalWidth}×${imF.naturalHeight} · ${ms}ms · NODE ${nodeId.slice(-9)}`;
+  } catch (e) {
+    console.error(e);
+    card.querySelector('.head small').textContent = 'ERROR: ' + e.message;
+  } finally {
+    stage.classList.remove('loading');
+  }
+}
+
+async function renderAll(){
+  if (!ready) return;
+  stat.textContent = 'Renderizando…';
+  const t0 = performance.now();
+  const cards = Array.from(grid.querySelectorAll('.card'));
+  for (const c of cards) await renderCard(c);
+  const dt = Math.round(performance.now() - t0);
+  stat.textContent = `${cards.length} boletos · ${dt}ms total`;
+  refreshMeta();
+}
+
+function refreshMeta(){
+  if (!appWin || !appWin.__STARSEED__) return;
+  const tc = appWin.__STARSEED__.TicketCanvas;
+  const frames = Object.keys(tc.FRAME_SAFE);
+  const dups = ROLES.reduce((acc, r) => {
+    acc[r.frameCategory] = (acc[r.frameCategory] || 0) + 1; return acc;
+  }, {});
+  const sharedFrames = Object.entries(dups).filter(([,n]) => n>1).map(([k,n]) => `${k}×${n}`);
+  meta.innerHTML = `
+    <span><b>${ROLES.length}</b> roles · <b>${frames.length}</b> marcos únicos</span>
+    <span><b>Duplicados:</b> ${sharedFrames.length ? sharedFrames.join(', ') : 'ninguno'}</span>
+    <span>Preset activo: <b>${presetSel.value}</b></span>
+    <span>Glyph: <b>${glyphSel.value}</b></span>`;
+}
+
+async function downloadAll(){
+  const cards = Array.from(grid.querySelectorAll('.card'));
+  for (const c of cards) {
+    const a = c.querySelector('[data-act="dl"]');
+    if (a.href && a.href.startsWith('data:')) {
+      a.click();
+      await new Promise(r => setTimeout(r, 200));
+    }
+  }
+}
+
+iframe.addEventListener('load', async () => {
+  appWin = iframe.contentWindow;
+  // Esperar a que __STARSEED__ esté disponible
+  let tries = 0;
+  while (!appWin.__STARSEED__ && tries < 60) {
+    await new Promise(r => setTimeout(r, 100));
+    tries++;
+  }
+  if (!appWin.__STARSEED__) {
+    stat.textContent = 'No se pudo conectar con la app embebida';
+    return;
+  }
+  ready = true;
+  buildCards();
+  await renderAll();
+});
+
+document.getElementById('btnRegen').addEventListener('click', scheduleRenderAll);
+document.getElementById('btnDl').addEventListener('click', downloadAll);
+document.getElementById('btnReload').addEventListener('click', () => {
+  ready = false; iframe.src = '../index.html?staging=1&t=' + Date.now();
+});
+presetSel.addEventListener('change', scheduleRenderAll);
+glyphSel.addEventListener('change', scheduleRenderAll);
+</script>
+</body>
+</html>
