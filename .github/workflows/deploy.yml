@@ -1,0 +1,68 @@
+# ═══════════════════════════════════════════════════════════════════════
+#  StarSeed · GitHub Pages deploy
+#  Inyecta las credenciales como secretos de repositorio y las escribe
+#  en config.js antes de publicar — así el archivo nunca se expone en git.
+#
+#  Secretos a configurar en GitHub → Settings → Secrets → Actions:
+#    SUPABASE_URL          → https://gcnlnkywidvtpvscsbvd.supabase.co
+#    SUPABASE_ANON_KEY     → sb_publishable_6LtclbN838ZtjpIoEOh4KQ_TgCq4sx4
+#    MP_PUBLIC_KEY         → APP_USR-tu-public-key-de-mercadopago
+# ═══════════════════════════════════════════════════════════════════════
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages:    write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generar config.js desde secretos
+        env:
+          SUPABASE_URL:      ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          MP_PUBLIC_KEY:     ${{ secrets.MP_PUBLIC_KEY }}
+        run: |
+          cat > config.js <<EOF
+          window.SS_CFG = {
+            SUPABASE_URL:      '${SUPABASE_URL}',
+            SUPABASE_ANON_KEY: '${SUPABASE_ANON_KEY}',
+            MP_PUBLIC_KEY:     '${MP_PUBLIC_KEY}',
+            SPEI_CLABE:        '',
+            SPEI_BANCO:        'BBVA México',
+            SPEI_BENEFICIARIO: 'Alejandro Bordón Garrigós',
+            EMAIL_FUNCTION_URL:'',
+          };
+          EOF
+          echo "config.js generated (credentials injected from secrets)"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
