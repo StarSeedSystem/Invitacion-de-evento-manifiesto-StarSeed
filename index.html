@@ -717,44 +717,8 @@
     }
     .donation-min-warn.show{ display:inline-flex; }
 
-    /* Métodos de pago */
-    .payment-methods{
-      display:grid; grid-template-columns:repeat(2,1fr); gap:.45rem; margin:.55rem 0 .7rem;
-    }
-    .pm-opt{
-      display:flex; align-items:center; gap:.5rem;
-      padding:.65rem .7rem;
-      background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.10);
-      border-radius:11px; cursor:pointer;
-      color:rgba(255,255,255,.78); font-size:.72rem; font-weight:500;
-      transition:all .25s var(--ease);
-    }
-    .pm-opt:hover{ border-color:rgba(16,185,129,.35); color:var(--emerald-bright); }
-    .pm-opt.active{
-      background:linear-gradient(135deg, rgba(16,185,129,.14), rgba(6,182,212,.10));
-      border-color:var(--emerald);
-      color:#fff; box-shadow:0 0 0 3px rgba(16,185,129,.06);
-    }
-    .pm-opt svg{ width:16px; height:16px; flex-shrink:0; }
-    .pm-opt-label{ display:flex; flex-direction:column; line-height:1.15; }
-    .pm-opt-label small{ font-size:.58rem; opacity:.55; letter-spacing:.5px; }
-
-    /* Sub-paneles de pago (tarjeta, SPEI, promo) */
-    .pm-panel{
-      margin-top:.5rem; padding:.7rem .8rem;
-      background:rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.06);
-      border-radius:11px; display:none;
-    }
-    .pm-panel.show{ display:block; }
-    .pm-panel-h{
-      font-family:var(--font-display); font-size:.55rem; font-weight:700;
-      letter-spacing:2px; text-transform:uppercase;
-      color:rgba(255,255,255,.42); margin:0 0 .5rem;
-    }
-    .pm-card-grid{
-      display:grid; grid-template-columns:1fr 90px 90px; gap:.4rem;
-    }
-    .pm-card-grid .form-input{ font-family:'JetBrains Mono','Menlo',monospace; font-size:.85rem; letter-spacing:.5px; }
+    /* Promo inline (opcional, sobre el monto) */
+    .promo-inline{ margin:.6rem 0 0; }
     .promo-row{ display:flex; gap:.4rem; }
     .promo-row .form-input{ flex:1; text-transform:uppercase; letter-spacing:1.5px; }
     .promo-apply{
@@ -770,14 +734,35 @@
     .promo-status.show{ opacity:1; }
     .promo-status.ok{ color:var(--emerald-bright); }
     .promo-status.bad{ color:#fca5a5; }
-    .spei-data{ font-family:'JetBrains Mono',monospace; font-size:.72rem; line-height:1.7; color:rgba(255,255,255,.8); }
-    .spei-data b{ color:var(--gold); }
-    .spei-copy{
-      margin-left:.3rem; padding:1px 6px; font-size:.6rem; cursor:pointer;
-      background:transparent; border:1px solid rgba(255,255,255,.18); border-radius:5px;
-      color:rgba(255,255,255,.5);
+
+    /* Bloque MercadoPago */
+    .mp-pay-block{ margin-top:.75rem; }
+    .mp-btn{
+      display:flex; align-items:center; justify-content:center; gap:.55rem;
+      width:100%; padding:.9rem 1.2rem; margin-top:.6rem;
+      background:linear-gradient(135deg,#009ee3,#0077b6);
+      border:none; border-radius:13px; cursor:pointer;
+      color:#fff; font:700 .92rem/1 'Orbitron','Inter',sans-serif;
+      letter-spacing:.04em; text-transform:uppercase;
+      box-shadow:0 6px 24px rgba(0,158,227,.32);
+      transition:all .25s var(--ease);
     }
-    .spei-copy:hover{ color:var(--emerald-bright); border-color:var(--emerald); }
+    .mp-btn:hover{ transform:translateY(-1px); box-shadow:0 8px 28px rgba(0,158,227,.42); filter:brightness(1.06); }
+    .mp-btn:active{ transform:translateY(0); }
+    .mp-btn.loading{ opacity:.65; pointer-events:none; }
+    .mp-amount{
+      background:rgba(255,255,255,.18); border-radius:6px;
+      padding:2px 8px; font-size:.78rem; letter-spacing:.02em; margin-left:auto;
+    }
+    .mp-methods-hint{
+      text-align:center; font-size:.6rem; color:rgba(255,255,255,.38);
+      margin:.55rem 0 0; letter-spacing:.5px;
+      display:flex; align-items:center; justify-content:center; gap:.5rem; flex-wrap:wrap;
+    }
+    .mp-secure-badge{
+      display:inline-flex; align-items:center; gap:3px;
+      color:rgba(52,211,153,.6); font-weight:600;
+    }
 
     /* Resumen de cobro inferior */
     .payment-summary{
@@ -1392,86 +1377,35 @@
                 <span>Mínimo $50 MXN — usa un código promocional para reducir o eximir el costo.</span>
               </div>
 
-              <label class="form-label" style="margin-top:.4rem">Método de pago</label>
-              <div class="payment-methods" id="payment-methods">
-                <button type="button" class="pm-opt active" data-pm="card">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-                  <span class="pm-opt-label">Tarjeta<small>Crédito · Débito</small></span>
-                </button>
-                <button type="button" class="pm-opt" data-pm="spei">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4"/><path d="M3 17l9 4 9-4"/></svg>
-                  <span class="pm-opt-label">SPEI / Transferencia<small>CLABE digital</small></span>
-                </button>
-                <button type="button" class="pm-opt" data-pm="cash">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v12M9 9h4.5a2.5 2.5 0 0 1 0 5H9M9 14h5.5a2.5 2.5 0 0 1 0 5H9"/></svg>
-                  <span class="pm-opt-label">Efectivo<small>Pago en evento</small></span>
-                </button>
-                <button type="button" class="pm-opt" data-pm="promo">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                  <span class="pm-opt-label">Código Promo<small>Beca · Descuento · Free</small></span>
-                </button>
-              </div>
-
-              <!-- Sub-panel: Tarjeta -->
-              <div class="pm-panel show" id="pm-panel-card">
-                <p class="pm-panel-h">Datos de tarjeta · pago seguro</p>
-                <input class="form-input" type="text" id="f-card-number" placeholder="1234 5678 9012 3456" autocomplete="cc-number" inputmode="numeric" maxlength="19" style="margin-bottom:.4rem;font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;">
-                <div class="pm-card-grid">
-                  <input class="form-input" type="text" id="f-card-name" placeholder="NOMBRE EN TARJETA" autocomplete="cc-name" style="text-transform:uppercase;">
-                  <input class="form-input" type="text" id="f-card-exp" placeholder="MM/AA" autocomplete="cc-exp" maxlength="5">
-                  <input class="form-input" type="text" id="f-card-cvv" placeholder="CVV" autocomplete="cc-csc" inputmode="numeric" maxlength="4">
-                </div>
-                <p class="pm-panel-h" style="margin-top:.55rem;color:rgba(52,211,153,.6);">
-                  <svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  Cifrado TLS · datos no almacenados (procesado vía pasarela externa)
-                </p>
-              </div>
-
-              <!-- Sub-panel: SPEI -->
-              <div class="pm-panel" id="pm-panel-spei">
-                <p class="pm-panel-h">Datos de transferencia (SPEI)</p>
-                <div class="spei-data">
-                  Banco: <b id="spei-banco">BBVA México</b><br>
-                  Beneficiario: <b id="spei-benef">Sociedad StarSeed</b><br>
-                  CLABE: <b id="spei-clabe">— pendiente de configuración —</b>
-                  <button type="button" class="spei-copy" onclick="navigator.clipboard.writeText(document.getElementById('spei-clabe').textContent.replace(/\s/g,''));this.textContent='✓ copiada';setTimeout(()=>this.textContent='copiar',1400)">copiar</button><br>
-                  Concepto: <b id="spei-concepto">SS-···-····</b>
-                </div>
-                <p class="pm-panel-h" style="margin-top:.6rem;">
-                  Sube tu comprobante por email a <b style="color:#fbbf24">finanzas@starseed.network</b>
-                  con el concepto. Tu boleto se libera al confirmar el pago.
-                </p>
-              </div>
-
-              <!-- Sub-panel: Efectivo -->
-              <div class="pm-panel" id="pm-panel-cash">
-                <p class="pm-panel-h">Pago en efectivo · día del evento</p>
-                <p style="font-size:.72rem;color:rgba(255,255,255,.72);line-height:1.5;margin:0;">
-                  Reservas tu lugar y pagas <b style="color:#fbbf24">$<span id="cash-amount">50</span> MXN</b>
-                  en la entrada del evento (Cuernavaca, 31 mayo 2026 · 16:00 HRS).
-                  Tu boleto digital queda generado pero marcado como <em>pago pendiente</em>
-                  hasta que se confirme la entrada.
-                </p>
-              </div>
-
-              <!-- Sub-panel: Promo Code -->
-              <div class="pm-panel" id="pm-panel-promo">
-                <p class="pm-panel-h">Código promocional · beca o descuento</p>
+              <!-- Código promocional opcional (siempre visible, aplica sobre el monto) -->
+              <div class="promo-inline" id="promo-inline">
                 <div class="promo-row">
-                  <input class="form-input" type="text" id="f-promo" placeholder="STARSEED2026" autocomplete="off" maxlength="32">
+                  <input class="form-input" type="text" id="f-promo"
+                    placeholder="Código de beca o descuento (opcional)"
+                    autocomplete="off" maxlength="32">
                   <button type="button" class="promo-apply" id="btn-apply-promo">Aplicar</button>
                 </div>
                 <p class="promo-status" id="promo-status"></p>
-                <p class="pm-panel-h" style="margin-top:.5rem;">
-                  Códigos válidos otorgan descuento parcial o boleto gratuito. Las becas son
-                  intransferibles y vinculadas al email registrado.
-                </p>
               </div>
 
-              <!-- Resumen final -->
-              <div class="payment-summary">
-                <span class="ps-label">Total a aportar</span>
-                <span class="ps-value" id="ps-value">$50 MXN</span>
+              <!-- Resumen + botón MercadoPago -->
+              <div class="mp-pay-block">
+                <div class="payment-summary">
+                  <span class="ps-label">Total a aportar</span>
+                  <span class="ps-value" id="ps-value">$50 MXN</span>
+                </div>
+                <button type="button" class="mp-btn" id="mp-pay-btn">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <span>Pagar con MercadoPago</span>
+                  <span class="mp-amount" id="mp-amount-badge">$50 MXN</span>
+                </button>
+                <p class="mp-methods-hint">
+                  Tarjeta · OXXO · SPEI · Todos los métodos disponibles
+                  <span class="mp-secure-badge">
+                    <svg viewBox="0 0 24 24" width="8" height="8" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    PCI DSS · TLS
+                  </span>
+                </p>
               </div>
             </div>
 
@@ -3878,63 +3812,56 @@
        • promo  → status 'paid' (cortesía, sin cargo).
        • spei   → status 'pending' — muestra CLABE; se confirma manualmente.
        • cash   → status 'pending_event' — pago en evento.
-       • card   → MercadoPago Checkout Pro (redirect) cuando SS_CFG.MP_PUBLIC_KEY
-                  está configurado; si no, modo sandbox (simulación interna).
-                  Flujo MP:
-                    1. Crea preferencia vía Supabase Edge Function
-                       POST /functions/v1/create-mp-preference
-                    2. Redirige al init_point de MercadoPago
-                    3. MP devuelve a /success?payment_id=…&status=approved (o failure)
-                    4. La función webhook actualiza el registro en Supabase */
-    async function chargePayment({ method, amount, cardData, promoApplied, userData }){
+       Flujo MercadoPago Checkout Pro:
+         1. promo_free → status 'paid' inmediato (sin cargo, boleto cortesía)
+         2. Si tiene Supabase + MP_ACCESS_TOKEN configurados:
+            – Crea preferencia vía Edge Function → redirige a MP hosted checkout
+            – MP maneja tarjeta, OXXO, SPEI, etc. en su propia página segura
+            – Al volver: ?mp_status=success → muestra boleto
+            – Webhook independiente confirma el pago en Supabase
+         3. Sin credenciales (sandbox): simula pago aprobado localmente */
+    async function chargePayment({ amount, promoApplied, userData }){
       const txnId = 'TX-' + crypto.getRandomValues(new Uint8Array(6))
         .reduce((s,b)=>s+b.toString(16).padStart(2,'0'),'').toUpperCase();
 
+      // Cortesía total por código promo → boleto inmediato sin cargo
       if (amount === 0 && promoApplied) {
         return { ok:true, txnId, status:'paid', method:'promo' };
       }
 
-      if (method === 'spei') return { ok:true, txnId, status:'pending', method:'spei' };
-      if (method === 'cash') return { ok:true, txnId, status:'pending_event', method:'cash' };
+      // ── MercadoPago Checkout Pro (producción con credenciales) ───────────
+      const edgeFn = SS_CFG.SUPABASE_URL
+        ? `${SS_CFG.SUPABASE_URL}/functions/v1/create-mp-preference`
+        : null;
 
-      if (method === 'card') {
-        // ── Modo MercadoPago Checkout Pro (producción) ───────────────────────
-        const edgeFn = SS_CFG.SUPABASE_URL
-          ? `${SS_CFG.SUPABASE_URL}/functions/v1/create-mp-preference`
-          : null;
-
-        if (edgeFn && SS_CFG.SUPABASE_ANON_KEY) {
-          const resp = await fetch(edgeFn, {
-            method: 'POST',
-            headers: {
-              'Content-Type':  'application/json',
-              'Authorization': `Bearer ${SS_CFG.SUPABASE_ANON_KEY}`,
-            },
-            body: JSON.stringify({
-              amount,
-              description: `StarSeed · ${userData?.name || 'Invitado'} · ${userData?.rolePrimaryLabel || ''}`,
-              email:        userData?.email || '',
-              external_ref: txnId,
-              back_url:     window.location.href,
-            }),
-          });
-          if (!resp.ok) throw new Error(`MP preference HTTP ${resp.status}`);
-          const { init_point } = await resp.json();
-          // Guardar txnId en sessionStorage para recuperar al volver
-          sessionStorage.setItem('ss_pending_txn', JSON.stringify({ txnId, method:'card', status:'pending_mp' }));
-          window.location.href = init_point;
-          // La función nunca llega más allá de esta línea (redirect)
-          return { ok:true, txnId, status:'pending_mp', method:'card' };
-        }
-
-        // ── Modo sandbox / sin credenciales ─────────────────────────────────
-        await new Promise(r => setTimeout(r, 1200));
-        return { ok:true, txnId, status:'paid', method:'card',
-                 last4: (cardData?.number||'').replace(/\s/g,'').slice(-4),
-                 sandbox: true };
+      if (edgeFn && SS_CFG.SUPABASE_ANON_KEY) {
+        const resp = await fetch(edgeFn, {
+          method: 'POST',
+          headers: {
+            'Content-Type':  'application/json',
+            'Authorization': `Bearer ${SS_CFG.SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify({
+            amount,
+            description: `StarSeed · ${userData?.name || 'Invitado'} · ${userData?.rolePrimaryLabel || ''}`,
+            email:        userData?.email || '',
+            external_ref: txnId,
+            back_url:     window.location.href.split('?')[0],
+          }),
+        });
+        if (!resp.ok) throw new Error(`MP preference HTTP ${resp.status}`);
+        const { init_point } = await resp.json();
+        // Guardar datos del pendiente: al regresar de MP los recuperamos
+        sessionStorage.setItem('ss_pending_txn', JSON.stringify({
+          txnId, status:'pending_mp', amount, userData: JSON.stringify(userData)
+        }));
+        window.location.href = init_point;
+        return { ok:true, txnId, status:'pending_mp', method:'mp' };
       }
 
-      return { ok:false, txnId, status:'unknown' };
+      // ── Sandbox (sin credenciales configuradas) ──────────────────────────
+      await new Promise(r => setTimeout(r, 900));
+      return { ok:true, txnId, status:'paid', method:'mp_sandbox', sandbox:true };
     }
 
     /* Export CSV — usado por panel admin */
@@ -3967,14 +3894,14 @@
     };
   })();
 
-  /* Donation/Payment widget — controla el formulario de aportación.
-     Mantiene un objeto interno con el estado del pago y lo expone vía
-     getState() para que RSVP.submit() lo capture al enviar. */
+  /* Donation/Payment widget
+     Flujo: cantidad libre + promo opcional → botón MercadoPago.
+     El estado se expone vía getState() para RSVP.submit(). */
   const DonationWidget = (() => {
     const state = {
       baseAmount: 50,
       finalAmount: 50,
-      method: 'card',
+      method: 'mp',          // siempre MP
       promoCode: '',
       promoApplied: false,
       promoLabel: '',
@@ -3982,7 +3909,6 @@
 
     function setAmount(n){
       state.baseAmount = Math.max(0, Math.round(Number(n) || 0));
-      // Re-aplicar promo si existe
       if (state.promoApplied) {
         const r = Registry.applyPromo(state.promoCode, state.baseAmount);
         state.finalAmount = r.finalAmount;
@@ -3991,24 +3917,12 @@
       }
       updateUI();
     }
-    function setMethod(m){
-      state.method = m;
-      // Mostrar el panel correspondiente
-      ['card','spei','cash','promo'].forEach(k => {
-        const p = document.getElementById('pm-panel-' + k);
-        if (p) p.classList.toggle('show', k === m);
-      });
-      document.querySelectorAll('.pm-opt').forEach(b =>
-        b.classList.toggle('active', b.dataset.pm === m));
-      // Si elige "promo" sin aplicar todavía, no liberar el mínimo aún
-      updateUI();
-    }
+
     function applyPromoCode(){
-      const code = document.getElementById('f-promo').value.trim();
+      const code = (document.getElementById('f-promo')?.value || '').trim();
       const status = document.getElementById('promo-status');
       if (!code) {
-        status.textContent = 'Escribe un código';
-        status.className = 'promo-status show bad';
+        if(status){ status.textContent = 'Escribe un código'; status.className = 'promo-status show bad'; }
         return;
       }
       const r = Registry.applyPromo(code, state.baseAmount);
@@ -4017,96 +3931,77 @@
         state.promoCode = code.toUpperCase();
         state.promoLabel = r.label;
         state.finalAmount = r.finalAmount;
-        status.textContent = '✓ ' + r.label + (r.finalAmount === 0 ? ' · BOLETO GRATUITO' : '');
-        status.className = 'promo-status show ok';
+        if(status){
+          status.textContent = '✓ ' + r.label + (r.finalAmount === 0 ? ' · BOLETO GRATUITO' : '');
+          status.className = 'promo-status show ok';
+        }
       } else {
-        state.promoApplied = false;
-        state.promoCode = '';
-        state.promoLabel = '';
+        state.promoApplied = false; state.promoCode = ''; state.promoLabel = '';
         state.finalAmount = state.baseAmount;
-        status.textContent = '✗ ' + r.label;
-        status.className = 'promo-status show bad';
+        if(status){ status.textContent = '✗ ' + r.label; status.className = 'promo-status show bad'; }
       }
       updateUI();
     }
+
     function updateUI(){
-      // Resumen
       const ps = document.getElementById('ps-value');
+      const badge = document.getElementById('mp-amount-badge');
+      const amtStr = state.promoApplied && state.finalAmount === 0
+        ? 'GRATUITO'
+        : `$${state.finalAmount} MXN`;
       if (ps) {
         if (state.promoApplied) {
-          if (state.finalAmount === 0) {
+          if (state.finalAmount === 0)
             ps.innerHTML = `<span class="ps-old">$${state.baseAmount}</span>$0 MXN <span class="ps-free">CORTESÍA</span>`;
-          } else {
+          else
             ps.innerHTML = `<span class="ps-old">$${state.baseAmount}</span>$${state.finalAmount} MXN`;
-          }
         } else {
           ps.textContent = `$${state.baseAmount} MXN`;
         }
       }
-      // Cash subpanel
-      const cashAmt = document.getElementById('cash-amount');
-      if (cashAmt) cashAmt.textContent = state.finalAmount;
+      if (badge) badge.textContent = amtStr;
       // Min warn
       const w = document.getElementById('don-warn');
       if (w) w.classList.toggle('show', state.baseAmount < 50 && !state.promoApplied);
-      // Presets activos
+      // Presets
       document.querySelectorAll('#donation-presets button').forEach(b =>
         b.classList.toggle('active', Number(b.dataset.amt) === state.baseAmount));
+      // Ocultar botón MP si es cortesía total (submit del form se encarga)
+      const mpBtn = document.getElementById('mp-pay-btn');
+      if (mpBtn) {
+        mpBtn.style.display = (state.promoApplied && state.finalAmount === 0) ? 'none' : '';
+      }
     }
+
     function getState(){ return { ...state }; }
 
     function init(){
-      // Poblar datos SPEI desde SS_CFG si están configurados
-      if (SS_CFG.SPEI_CLABE) {
-        const clabe = SS_CFG.SPEI_CLABE.replace(/(\d{3})(\d{3})(\d{6})(\d{5})(\d{1})/, '$1 $2 $3 $4 $5');
-        const el = document.getElementById('spei-clabe');
-        if (el) el.textContent = clabe;
-      }
-      if (SS_CFG.SPEI_BANCO) {
-        const el = document.getElementById('spei-banco');
-        if (el) el.textContent = SS_CFG.SPEI_BANCO;
-      }
-      if (SS_CFG.SPEI_BENEFICIARIO) {
-        const el = document.getElementById('spei-benef');
-        if (el) el.textContent = SS_CFG.SPEI_BENEFICIARIO;
-      }
       // Presets
       document.querySelectorAll('#donation-presets button').forEach(b => {
         b.addEventListener('click', () => {
           const v = Number(b.dataset.amt);
-          document.getElementById('f-donation').value = v;
+          const inp = document.getElementById('f-donation');
+          if (inp) inp.value = v;
           setAmount(v);
         });
       });
       // Input directo
       const inp = document.getElementById('f-donation');
       if (inp) inp.addEventListener('input', e => setAmount(e.target.value));
-      // Métodos de pago
-      document.querySelectorAll('.pm-opt').forEach(b => {
-        b.addEventListener('click', () => setMethod(b.dataset.pm));
-      });
       // Aplicar promo
       const apply = document.getElementById('btn-apply-promo');
       if (apply) apply.addEventListener('click', applyPromoCode);
-      // Format card number con espacios
-      const cnum = document.getElementById('f-card-number');
-      if (cnum) cnum.addEventListener('input', e => {
-        let v = e.target.value.replace(/\D/g,'').slice(0,16);
-        e.target.value = v.replace(/(\d{4})(?=\d)/g,'$1 ').trim();
-      });
-      const cexp = document.getElementById('f-card-exp');
-      if (cexp) cexp.addEventListener('input', e => {
-        let v = e.target.value.replace(/\D/g,'').slice(0,4);
-        if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
-        e.target.value = v;
-      });
-      const cvv = document.getElementById('f-card-cvv');
-      if (cvv) cvv.addEventListener('input', e => {
-        e.target.value = e.target.value.replace(/\D/g,'').slice(0,4);
+      // Promo con Enter
+      const fPromo = document.getElementById('f-promo');
+      if (fPromo) fPromo.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); applyPromoCode(); } });
+      // Botón MP → dispara el submit del form (que valida todo primero)
+      const mpBtn = document.getElementById('mp-pay-btn');
+      if (mpBtn) mpBtn.addEventListener('click', () => {
+        document.getElementById('submit-btn')?.click();
       });
       updateUI();
     }
-    return { init, setAmount, setMethod, applyPromoCode, getState };
+    return { init, setAmount, applyPromoCode, getState };
   })();
 
   /* Cupo controller — actualiza badges y bloquea form si está agotado */
@@ -4254,27 +4149,10 @@
       if (selectedRoles.length === 0) { Toast.show('Selecciona al menos una forma de aportar', {err:true}); return; }
       if (selectedRoles.includes('other') && !customRole) { Toast.show('Describe tu forma de aportar', {err:true}); return; }
 
-      // 1. Validación de donación / método de pago
+      // 1. Validación de donación
       const dn = DonationWidget.getState();
-      if (dn.method === 'card') {
-        const num = (document.getElementById('f-card-number').value || '').replace(/\s/g,'');
-        const exp = document.getElementById('f-card-exp').value;
-        const cvv = document.getElementById('f-card-cvv').value;
-        const cnm = document.getElementById('f-card-name').value.trim();
-        // Sólo validar tarjeta si hay monto a cobrar
-        if (dn.finalAmount > 0) {
-          if (num.length < 13 || num.length > 19) { Toast.show('Número de tarjeta inválido', {err:true}); return; }
-          if (!/^\d{2}\/\d{2}$/.test(exp)) { Toast.show('Vencimiento inválido (MM/AA)', {err:true}); return; }
-          if (cvv.length < 3) { Toast.show('CVV inválido', {err:true}); return; }
-          if (!cnm) { Toast.show('Nombre en tarjeta requerido', {err:true}); return; }
-        }
-      }
-      if (dn.baseAmount < 50 && !dn.promoApplied) {
+      if (dn.finalAmount > 0 && dn.baseAmount < 50) {
         Toast.show('Donación mínima $50 MXN o usa código promocional', {err:true});
-        return;
-      }
-      if (dn.method === 'promo' && !dn.promoApplied) {
-        Toast.show('Aplica un código promocional antes de continuar', {err:true});
         return;
       }
 
@@ -4306,24 +4184,23 @@
       // 4. Procesar pago + UI loading
       const btn = document.getElementById('submit-btn');
       btn.classList.add('loading'); btn.disabled = true;
+      const mpBtn = document.getElementById('mp-pay-btn');
+      if (mpBtn) mpBtn.classList.add('loading');
 
       let charge;
       try {
         charge = await Registry.chargePayment({
-          method: dn.method === 'promo' ? 'promo' : dn.method,
           amount: dn.finalAmount,
-          cardData: dn.method === 'card' ? {
-            number: document.getElementById('f-card-number').value,
-            exp:    document.getElementById('f-card-exp').value,
-            name:   document.getElementById('f-card-name').value,
-          } : null,
           promoApplied: dn.promoApplied,
           userData,
         });
         if (!charge.ok) throw new Error('Pago rechazado');
+        // Si es redirect MP (pending_mp), el flujo continúa al volver a la página
+        if (charge.status === 'pending_mp') return;
       } catch(e) {
         btn.classList.remove('loading'); btn.disabled = false;
-        Toast.show('Error de pago: ' + e.message, {err:true});
+        if (mpBtn) mpBtn.classList.remove('loading');
+        Toast.show('Error al iniciar pago: ' + e.message, {err:true});
         return;
       }
 
@@ -4379,9 +4256,7 @@
       document.getElementById('confirm-role').textContent = `${roleEmojis} ${userData.roleLabel}`;
       Toast.show(charge.status === 'paid'
         ? '✦ Pago confirmado · NODE ' + nodeId
-        : charge.status === 'pending'
-          ? '✦ Reserva creada · esperando confirmación SPEI'
-          : '✦ Reserva creada · pago en evento');
+        : '✦ Registro creado · pago pendiente de confirmación');
 
       Cupo.refresh();
 
@@ -4550,6 +4425,98 @@
     return { init };
   })();
 
+  /* ═══════ RETORNO DESDE MERCADOPAGO ═══════
+     Cuando MP redirige de vuelta a la página con ?mp_status=success&txn=TX-xxx
+     recuperamos los datos del participante desde sessionStorage y entregamos
+     el boleto sin que el usuario tenga que re-llenar el formulario.  */
+  async function handleMpReturn() {
+    const params = new URLSearchParams(window.location.search);
+    const mpStatus = params.get('mp_status');
+    if (!mpStatus) return;                      // no venimos de MP
+
+    // Limpiar URL para evitar re-disparo en refresh
+    history.replaceState({}, '', window.location.origin + window.location.pathname);
+
+    const raw = sessionStorage.getItem('ss_pending_txn');
+    sessionStorage.removeItem('ss_pending_txn');
+
+    if (mpStatus !== 'success') {
+      Toast.show(
+        mpStatus === 'failure'
+          ? 'El pago fue rechazado. Inténtalo de nuevo.'
+          : 'El pago está siendo procesado. Te avisaremos por email.',
+        { err: mpStatus === 'failure' }
+      );
+      return;
+    }
+
+    if (!raw) {
+      Toast.show('✦ Pago recibido. Tu boleto llegará por email en breve.');
+      return;
+    }
+
+    let pending;
+    try { pending = JSON.parse(raw); } catch { return; }
+
+    let restoredUser = {};
+    try { restoredUser = JSON.parse(pending.userData || '{}'); } catch {}
+
+    // Restaurar estado global del participante
+    userData = restoredUser;
+
+    const nodeId   = restoredUser.id || pending.txnId;
+    const amount   = pending.amount  || 0;
+
+    // Registrar localmente + Supabase
+    try {
+      const record = Registry.register({
+        nodeId,
+        name:          restoredUser.name        || '',
+        email:         restoredUser.email       || '',
+        whatsapp:      restoredUser.whatsapp    || '',
+        comment:       restoredUser.comment     || '',
+        roleIds:       restoredUser.roleIds     || [],
+        roleId:        restoredUser.roleId      || '',
+        roleLabel:     restoredUser.roleLabel   || '',
+        frameFile:     restoredUser.frameFile   || 'ticket_spirit.png',
+        frameCategory: restoredUser.frameCategory || 'spirit',
+        colors:        restoredUser.colors      || [],
+        donation: {
+          amount,
+          baseAmount:  amount,
+          method:      'mp',
+          status:      'paid',      // paid optimísticamente; webhook lo confirma en Supabase
+          txnId:       pending.txnId,
+          promoCode:   null,
+          promoLabel:  null,
+          last4:       null,
+        },
+      });
+      Registry.pushRemote(record);
+    } catch (e) {
+      if (e.message === 'CUPO_FULL') {
+        Toast.show('Cupo agotado mientras procesábamos. Escríbenos.', { err:true });
+        return;
+      }
+      console.error('[MP Return] registro error:', e);
+    }
+
+    // Abrir modal en la vista de confirmación
+    RSVP.open();
+    document.getElementById('v-form').style.display    = 'none';
+    document.getElementById('v-confirm').style.display = '';
+    const firstName = (restoredUser.name || 'StarSeed').split(' ')[0];
+    document.getElementById('confirm-name').textContent = `¡Bienvenido, ${firstName}!`;
+    const roleEmojis = (restoredUser.roleIds || [])
+      .map(id => ROLES.find(r => r.id === id)?.emoji || '✨').join(' ');
+    document.getElementById('confirm-role').textContent =
+      `${roleEmojis} ${restoredUser.roleLabel || ''}`;
+
+    Toast.show('✦ Pago confirmado · NODE ' + nodeId);
+    Cupo.refresh();
+    TicketCanvas.forgeAndPreview();
+  }
+
   /* ═══════ INIT ═══════ */
   const initApp = () => {
     try {
@@ -4570,6 +4537,8 @@
       StickyHeader.init();
       // Mostrar el cupo restante en cuanto carga
       Cupo.refresh();
+      // Manejar retorno desde MercadoPago (si aplica)
+      handleMpReturn().catch(e => console.error('[MP Return]', e));
     } catch (e) { console.error('[StarSeed] initApp error', e); }
   };
 
