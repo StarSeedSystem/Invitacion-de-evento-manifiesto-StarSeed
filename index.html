@@ -96,7 +96,17 @@
       box-shadow:0 2px 12px rgba(251,191,36,.15);
     }
     .header-cta:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(251,191,36,.3);}
-    @media(max-width:700px){ .header-nav{display:none} }
+    .header-login{
+      display:inline-flex; align-items:center; gap:.4rem;
+      font-family:var(--font-display); font-size:.58rem; letter-spacing:2px;
+      text-transform:uppercase; padding:.4rem .75rem; margin-right:.55rem;
+      background:rgba(167,139,250,.1); border:1px solid rgba(167,139,250,.3);
+      color:#c4b5fd; border-radius:8px; cursor:pointer; font-weight:600;
+      transition:all .3s var(--ease);
+    }
+    .header-login:hover{ background:rgba(167,139,250,.2); border-color:#a78bfa; transform:translateY(-1px); }
+    .header-login.is-logged{ background:rgba(16,185,129,.1); border-color:rgba(16,185,129,.4); color:var(--emerald-bright); }
+    @media(max-width:700px){ .header-nav{display:none} .header-login span{display:none} }
 
     /* ═══════════════════════════════════════════════════════════════
        HERO (conservando hero-bg.png)
@@ -668,6 +678,42 @@
     .send-opt.active{border-color:var(--emerald);background:rgba(16,185,129,.1);color:var(--emerald-bright);}
     .send-opt svg{width:16px;height:16px;}
 
+    /* ═══ CUENTA STARSEED ═══ */
+    .account-card{
+      margin-top:1.2rem; padding:.85rem 1rem; border-radius:14px;
+      background:linear-gradient(180deg, rgba(167,139,250,.07) 0%, rgba(6,182,212,.04) 100%);
+      border:1px solid rgba(167,139,250,.22);
+    }
+    .account-toggle{
+      display:flex; align-items:flex-start; gap:.7rem; cursor:pointer;
+    }
+    .account-toggle input[type="checkbox"]{
+      flex-shrink:0; width:18px; height:18px; margin-top:2px;
+      accent-color:var(--purple); cursor:pointer;
+    }
+    .account-toggle-label{ display:flex; flex-direction:column; gap:.25rem; }
+    .account-toggle .acc-h{
+      font-family:var(--font-display); font-size:.65rem; font-weight:800; letter-spacing:2.5px;
+      text-transform:uppercase; color:var(--purple);
+      display:inline-flex; align-items:center; gap:.4rem;
+    }
+    .account-toggle .acc-h svg{ width:13px; height:13px; }
+    .account-toggle .acc-info{
+      font-size:.7rem; line-height:1.5; color:rgba(255,255,255,.65);
+    }
+    .account-toggle .acc-info strong{ color:#c4b5fd; font-weight:700; }
+    .account-fields{
+      margin-top:.7rem; display:flex; flex-direction:column; gap:.45rem;
+      animation:acc-in .25s var(--ease) both;
+    }
+    @keyframes acc-in { from{ opacity:0; transform:translateY(-4px); } to{ opacity:1; transform:translateY(0); } }
+    .account-fields .acc-row{ display:flex; }
+    .account-fields .form-input{ flex:1; }
+    .account-fields .acc-note{
+      font-size:.62rem; line-height:1.5; color:rgba(255,255,255,.45);
+      margin:.15rem 0 0; font-style:italic;
+    }
+
     /* ═══ DONACIÓN / PAGO ═══ */
     .donation-card{
       margin-top:1.2rem; padding:1rem 1.05rem; border-radius:14px;
@@ -903,6 +949,107 @@
       transform:translateY(30px) scale(.96);transition:transform .5s var(--ease);
       box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 60px rgba(16,185,129,.06);
     }
+
+    /* ═══ AUTH MODAL (login) ═══ */
+    .auth-modal, .profile-modal{
+      background:linear-gradient(180deg,rgba(10,15,30,.97) 0%,rgba(5,8,20,.98) 100%);
+      border:1px solid rgba(167,139,250,.2);border-radius:22px;
+      width:100%;max-width:480px;max-height:88vh;overflow-y:auto;position:relative;
+      padding:2rem 1.8rem;
+      transform:translateY(30px) scale(.96);transition:transform .5s var(--ease);
+      box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 60px rgba(167,139,250,.08);
+    }
+    .overlay.open .auth-modal,
+    .overlay.open .profile-modal{transform:translateY(0) scale(1);}
+    .auth-title{
+      font-family:var(--font-display);font-weight:700;font-size:1.25rem;
+      letter-spacing:1px;text-align:center;color:#c4b5fd;margin-bottom:.4rem;
+    }
+    .auth-sub{
+      font-size:.78rem;line-height:1.5;color:rgba(255,255,255,.55);
+      text-align:center;margin-bottom:1.4rem;
+    }
+    .auth-sub strong{ color:var(--emerald-bright); font-weight:600; }
+    .auth-submit{
+      width:100%; margin-top:.8rem;
+      background:linear-gradient(135deg, var(--purple), #7c3aed) !important;
+      color:#fff !important;
+      box-shadow:0 6px 20px rgba(167,139,250,.25) !important;
+    }
+    .auth-foot{
+      margin-top:1.1rem; font-size:.7rem; color:rgba(255,255,255,.5);
+      text-align:center; line-height:1.55;
+    }
+    .auth-foot a{ color:#c4b5fd; font-weight:600; text-decoration:underline; cursor:pointer; }
+    .auth-foot em{ color:var(--gold); font-style:normal; }
+
+    /* ═══ PROFILE MODAL ═══ */
+    .profile-modal{ max-width:540px; }
+    .profile-head{
+      display:flex; align-items:center; gap:1rem; margin-bottom:1.4rem;
+      padding-bottom:1.2rem; border-bottom:1px solid rgba(255,255,255,.07);
+    }
+    .profile-avatar{
+      width:64px; height:64px; border-radius:18px;
+      background:linear-gradient(135deg, rgba(167,139,250,.18), rgba(16,185,129,.12));
+      border:1px solid rgba(167,139,250,.32);
+      display:flex; align-items:center; justify-content:center;
+      font-size:2rem; color:var(--gold); font-family:var(--font-display);
+      flex-shrink:0;
+    }
+    .profile-name{
+      font-family:var(--font-display); font-weight:800; font-size:1.15rem;
+      color:#fff; letter-spacing:.5px; line-height:1.2; margin-bottom:.25rem;
+    }
+    .profile-role{
+      font-size:.7rem; line-height:1.4; color:rgba(255,255,255,.6);
+      letter-spacing:1px; text-transform:uppercase; font-family:var(--font-display);
+    }
+    .profile-grid{
+      display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin-bottom:1.4rem;
+    }
+    .profile-cell{
+      padding:.7rem .85rem; border-radius:11px;
+      background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);
+      display:flex; flex-direction:column; gap:.18rem;
+    }
+    .profile-cell .pc-l{
+      font-family:var(--font-display); font-size:.55rem; letter-spacing:2px;
+      text-transform:uppercase; color:rgba(167,139,250,.7); font-weight:700;
+    }
+    .profile-cell .pc-v{
+      font-family:'JetBrains Mono','Menlo',monospace; font-size:.82rem;
+      color:#fff; font-weight:600; word-break:break-all;
+    }
+    .profile-actions{
+      display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.4rem;
+    }
+    .profile-btn{
+      flex:1; min-width:120px; padding:.6rem .8rem; border-radius:10px;
+      background:rgba(167,139,250,.1); border:1px solid rgba(167,139,250,.28);
+      color:#c4b5fd; font:600 .68rem/1 var(--font-display);
+      letter-spacing:1.2px; text-transform:uppercase; cursor:pointer;
+      display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
+      transition:all .25s var(--ease);
+    }
+    .profile-btn:hover{ background:rgba(167,139,250,.2); transform:translateY(-1px); }
+    .profile-btn.profile-btn-out{
+      background:rgba(220,38,38,.07); border-color:rgba(220,38,38,.25); color:#fca5a5;
+    }
+    .profile-btn.profile-btn-out:hover{ background:rgba(220,38,38,.15); }
+    .profile-future{
+      padding:1rem; border-radius:12px;
+      background:linear-gradient(135deg, rgba(167,139,250,.08), rgba(6,182,212,.05));
+      border:1px solid rgba(167,139,250,.2);
+    }
+    .profile-future .pf-h{
+      font-family:var(--font-display); font-weight:800; font-size:.7rem;
+      letter-spacing:2px; color:#c4b5fd; margin-bottom:.4rem;
+    }
+    .profile-future .pf-info{
+      font-size:.72rem; line-height:1.55; color:rgba(255,255,255,.62);
+    }
+    .profile-future .pf-info strong{ color:#a78bfa; font-weight:700; }
     .info-modal::-webkit-scrollbar{width:5px;}
     .info-modal::-webkit-scrollbar-thumb{background:rgba(16,185,129,.25);border-radius:4px;}
     .overlay.open .info-modal{transform:translateY(0) scale(1);}
@@ -975,6 +1122,10 @@
       <a href="#pase">Tu pase</a>
       <a href="#recursos">Recursos</a>
     </nav>
+    <button class="header-login" id="header-login-btn" onclick="Accounts.openLogin()" aria-label="Iniciar sesión">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 22a8 8 0 0 1 16 0"/></svg>
+      <span id="header-login-label">Iniciar sesión</span>
+    </button>
     <button class="header-cta" onclick="RSVP.open()" aria-label="Confirmar asistencia">Generar mi Pase</button>
   </header>
 
@@ -1345,6 +1496,39 @@
             </div>
           </div>
 
+          <!-- ═══ CUENTA STARSEED (opcional · sincroniza tu boleto) ═══ -->
+          <div class="form-section">
+            <div class="account-card">
+              <label class="account-toggle">
+                <input type="checkbox" id="f-create-account">
+                <span class="account-toggle-label">
+                  <span class="acc-h">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 22a8 8 0 0 1 16 0"/></svg>
+                    Crear cuenta StarSeed
+                  </span>
+                  <span class="acc-info">
+                    Sincroniza tu boleto, pago y perfil. Más adelante se integrará a la
+                    <strong>Red StarSeed</strong> del sistema operativo oficial.
+                  </span>
+                </span>
+              </label>
+              <div class="account-fields" id="account-fields" style="display:none">
+                <div class="acc-row">
+                  <input class="form-input" type="password" id="f-password"
+                    placeholder="Contraseña (mín. 6 caracteres)" autocomplete="new-password" minlength="6">
+                </div>
+                <div class="acc-row">
+                  <input class="form-input" type="password" id="f-password2"
+                    placeholder="Confirma tu contraseña" autocomplete="new-password" minlength="6">
+                </div>
+                <p class="acc-note">
+                  Tu contraseña se guarda con cifrado SHA-256 en este dispositivo.
+                  Tu correo + NODE son la llave de acceso a tu perfil.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <!-- ═══ DONACIÓN / APORTACIÓN A LA SOCIEDAD STARSEED ═══ -->
           <div class="form-section">
             <div class="donation-card">
@@ -1491,6 +1675,86 @@
     </div>
   </div>
 
+  <!-- ═══ LOGIN MODAL ═══ -->
+  <div class="overlay" id="ov-login" role="dialog" aria-modal="true" aria-label="Iniciar sesión">
+    <div class="auth-modal">
+      <button class="modal-x" onclick="Accounts.closeLogin()" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <h2 class="auth-title">Iniciar sesión</h2>
+      <p class="auth-sub">Accede a tu perfil de la <strong>Sociedad StarSeed</strong></p>
+      <form id="login-form" autocomplete="off">
+        <div class="form-section">
+          <label class="form-label" for="login-email">Correo electrónico</label>
+          <input class="form-input" type="email" id="login-email" placeholder="correo@ejemplo.com" required>
+        </div>
+        <div class="form-section">
+          <label class="form-label" for="login-password">Contraseña</label>
+          <input class="form-input" type="password" id="login-password" placeholder="Tu contraseña" autocomplete="current-password" required minlength="6">
+        </div>
+        <button type="submit" class="submit-btn auth-submit">
+          <span class="btn-text">Entrar a mi perfil</span>
+          <div class="spinner"></div>
+        </button>
+        <p class="auth-foot">
+          ¿Aún no tienes cuenta? <a href="#" onclick="Accounts.closeLogin();RSVP.open();return false;">Genera tu pase</a> y marca <em>"Crear cuenta"</em>.
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ PROFILE MODAL ═══ -->
+  <div class="overlay" id="ov-profile" role="dialog" aria-modal="true" aria-label="Mi perfil StarSeed">
+    <div class="profile-modal">
+      <button class="modal-x" onclick="Accounts.closeProfile()" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <div class="profile-head">
+        <div class="profile-avatar" id="profile-avatar">⊛</div>
+        <div>
+          <h2 class="profile-name" id="profile-name">—</h2>
+          <p class="profile-role" id="profile-role">—</p>
+        </div>
+      </div>
+      <div class="profile-grid">
+        <div class="profile-cell">
+          <span class="pc-l">NODE</span>
+          <span class="pc-v" id="profile-node">—</span>
+        </div>
+        <div class="profile-cell">
+          <span class="pc-l">EMAIL</span>
+          <span class="pc-v" id="profile-email">—</span>
+        </div>
+        <div class="profile-cell">
+          <span class="pc-l">APORTACIÓN</span>
+          <span class="pc-v" id="profile-amount">—</span>
+        </div>
+        <div class="profile-cell">
+          <span class="pc-l">ESTADO PAGO</span>
+          <span class="pc-v" id="profile-status">—</span>
+        </div>
+      </div>
+      <div class="profile-actions">
+        <button class="profile-btn" onclick="Accounts.viewMyTicket()">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 7h20v3a2 2 0 0 0 0 4v3H2v-3a2 2 0 0 0 0-4V7z"/><line x1="13" y1="5" x2="13" y2="19"/></svg>
+          Ver mi boleto
+        </button>
+        <button class="profile-btn" onclick="Accounts.refreshStatus()">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Actualizar pago
+        </button>
+        <button class="profile-btn profile-btn-out" onclick="Accounts.logout()">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Cerrar sesión
+        </button>
+      </div>
+      <div class="profile-future">
+        <p class="pf-h">∞ Próximamente: Red StarSeed</p>
+        <p class="pf-info">
+          Tu cuenta se sincronizará automáticamente con la <strong>Red StarSeed</strong>:
+          el sistema operativo social descentralizado que conecta a la comunidad,
+          coordina Sanghas y ejecuta la Ontocracia. Ya estás dentro.
+        </p>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ TOAST ═══ -->
   <div class="toast-container" id="toast-container"></div>
 
@@ -1506,6 +1770,10 @@
     <img id="frame-business" src="ticket_business.png" alt="">
     <img id="frame-social" src="ticket_comm.png" alt="">
     <img id="frame-writer" src="ticket_writer.png" alt="">
+    <img id="frame-healer" src="ticket_healer.png" alt="">
+    <img id="frame-educator" src="ticket_educator.png" alt="">
+    <img id="frame-other" src="ticket_other.png" alt="">
+    <img id="frame-back" src="ticket_back.png" alt="">
   </div>
 
   <!-- Credenciales de producción (archivo local, no en git) -->
@@ -1536,6 +1804,9 @@
     // Panel MP → Credenciales → Producción o Test
     MP_PUBLIC_KEY:      '',   // ej. 'APP_USR-…' (clave pública, va en frontend)
     // La clave privada (ACCESS_TOKEN) sólo va en el Edge Function de Supabase
+    // Link de cobro (MercadoPago Tu Link) — gratuito, integra todos los métodos.
+    // Cuando está configurado, se usa preferentemente sobre el Edge Function.
+    MP_PAYMENT_LINK:    'https://link.mercadopago.com.mx/boletostarseed',
 
     // ── SPEI ──────────────────────────────────────────────────────────────
     SPEI_CLABE:         '',   // 18 dígitos CLABE destino
@@ -1638,22 +1909,20 @@
     '#0ea5e9','#84cc16','#fb923c','#e11d48','#7c3aed'
   ];
 
-  /* ── TICKET FRAME MAPPING ── (13 marcos únicos)
-     Categorías incluyen los 3 nuevos generados por IA:
-       healer (terapeuta), educator (educador), other (rol único). */
+  /* ── TICKET FRAME MAPPING ── (13 marcos oficiales únicos) */
   const TICKET_FRAMES = {
     tech:'ticket_tech.png', creative:'ticket_creative.png', nature:'ticket_nature.png',
     spirit:'ticket_spirit.png', music:'ticket_music.png', builder:'ticket_build.png',
     science:'ticket_science.png', business:'ticket_business.png',
     social:'ticket_comm.png', writer:'ticket_writer.png',
-    // Roles sin marco propio → reasignados al más resonante de los existentes:
-    // Terapeuta/Sanador ↔ Guía Espiritual (ambos trabajan lo energético/interior)
-    healer:'ticket_spirit.png',
-    // Educador/Mentor ↔ Escritor/Periodista (transmisión del conocimiento, la palabra)
-    educator:'ticket_writer.png',
-    // Otro/Aportación única ↔ Artista/Diseñador (el marco más abierto y versátil)
-    other:'ticket_creative.png',
+    // 3 marcos nuevos oficiales (ilustraciones dedicadas de IA):
+    healer:'ticket_healer.png',     // caduceo + lotos + códigos sanitarios
+    educator:'ticket_educator.png', // libros + brújula + sigilos del saber
+    other:'ticket_other.png',       // árbol + geometría sagrada + universal
   };
+
+  /* Reverso compartido — siempre se adjunta a TODOS los boletos */
+  const TICKET_BACK_FRAME = 'ticket_back.png';
 
   /* ═══════ STATE ═══════ */
   let selectedRoles = [];
@@ -2965,6 +3234,10 @@
       'ticket_spirit.png'  : { ix:0.2870, iy:0.2556, iw:0.4286, ih:0.4984 },
       'ticket_tech.png'    : { ix:0.2788, iy:0.1992, iw:0.4423, ih:0.6006 },
       'ticket_writer.png'  : { ix:0.3222, iy:0.3129, iw:0.3468, ih:0.3960 },
+      // 3 marcos oficiales nuevos (alta resolución, formato vertical 9:16)
+      'ticket_educator.png': { ix:0.2200, iy:0.2050, iw:0.5600, ih:0.6300 },
+      'ticket_healer.png'  : { ix:0.2350, iy:0.2050, iw:0.5300, ih:0.6450 },
+      'ticket_other.png'   : { ix:0.2200, iy:0.2150, iw:0.5600, ih:0.6200 },
     },
 
     async generate(){
@@ -3325,16 +3598,22 @@
      Resolución fija 900×1200 (relación 3:4 portrait).
      ═══════════════════════════════════════════════════════════════════════ */
   const TicketBack = {
+    /* Reverso oficial: usa la imagen ticket_back.png como marco y superpone
+       contenido en el área central libre. Los enlaces apuntan al ecosistema
+       StarSeed real — son los QRs que llevará impreso el boleto. */
     LINKS: [
-      { label:'INSTAGRAM',  url:'https://instagram.com/sociedad.starseed',
-        desc:'Síguenos · publicaciones diarias del proyecto' },
-      { label:'WEB OFICIAL', url:'https://starseed.network',
-        desc:'Sitio oficial de la Sociedad StarSeed' },
-      { label:'DOCUMENTOS', url:'https://starseed.network/docs',
-        desc:'Manifiesto, Ontocracia, Sanghas y proyecto completo' },
-      { label:'INVITACIÓN', url:'https://starseed.network/evento',
-        desc:'Esta página · invita a más nodos a la red' },
+      { label:'WEB OFICIAL', url:'https://starseed-c4b17.web.app/',
+        desc:'Sitio de la Sociedad StarSeed' },
+      { label:'INSTAGRAM',  url:'https://www.instagram.com/sociedad.starseed/',
+        desc:'@sociedad.starseed · publicaciones del proyecto' },
+      { label:'INVITACIÓN', url:'https://tinyurl.com/eventostarseed',
+        desc:'tinyurl.com/eventostarseed · invita a más nodos' },
+      { label:'DOCUMENTOS', url:'https://github.com/StarSeedSystem/Invitacion-de-evento-manifiesto-StarSeed#-documentos-oficiales',
+        desc:'Manifiesto, Códex, Plan Estratégico' },
     ],
+
+    /* Área interior segura del marco trasero — fracción del PNG */
+    BACK_SAFE: { ix: 0.115, iy: 0.155, iw: 0.770, ih: 0.665 },
 
     /* Genera un dataURL PNG de un QR para el contenido dado.
        Si el módulo qrcode-generator no cargó, devuelve null y el caller pinta
@@ -3360,219 +3639,201 @@
     },
 
     async generate(ud){
-      const W = 900, H = 1200;
+      // ── 1. Cargar marco oficial trasero a su tamaño nativo ──
+      let frame;
+      try {
+        frame = await this.loadImg(TICKET_BACK_FRAME);
+      } catch (e) {
+        console.warn('[TicketBack] back frame fallback:', e.message);
+        frame = null;
+      }
+      const W = frame?.naturalWidth  || 1408;
+      const H = frame?.naturalHeight || 768;
+
       const canvas = document.createElement('canvas');
       canvas.width = W; canvas.height = H;
       const ctx = canvas.getContext('2d');
       ctx.imageSmoothingQuality = 'high';
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
 
-      // ── 1. Fondo cósmico con gradientes radiales superpuestos ──
-      const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
-      bgGrad.addColorStop(0, '#08091a');
-      bgGrad.addColorStop(0.5, '#0c1230');
-      bgGrad.addColorStop(1, '#06070f');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, W, H);
-      // Halos
-      const halo = (cx, cy, r, color) => {
-        const g = ctx.createRadialGradient(cx,cy,0, cx,cy,r);
-        g.addColorStop(0, color);
-        g.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = g;
-        ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
-      };
-      halo(W*0.18, H*0.10, 380, 'rgba(167,139,250,0.15)');
-      halo(W*0.85, H*0.55, 420, 'rgba(16,185,129,0.13)');
-      halo(W*0.20, H*0.92, 360, 'rgba(251,191,36,0.10)');
+      // 2. Pintar el marco oficial (si cargó). Si no, fondo cósmico de respaldo.
+      if (frame) {
+        ctx.drawImage(frame, 0, 0, W, H);
+      } else {
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+        bgGrad.addColorStop(0, '#08091a');
+        bgGrad.addColorStop(1, '#06070f');
+        ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, W, H);
+      }
 
-      // ── 2. Marco ornamental sintético (combina elementos de los 10 frames) ──
-      this.drawOrnamentalFrame(ctx, W, H);
+      // 3. ÁREA INTERIOR SEGURA del marco trasero
+      const safe = this.BACK_SAFE;
+      const ix = W*safe.ix, iy = H*safe.iy, iw = W*safe.iw, ih = H*safe.ih;
+      const cx = ix + iw/2;
+      const R  = Math.min(iw, ih);
 
-      // ── 3. Sello StarSeed central arriba ──
+      // 4. Velo oscuro semitransparente sobre el área central — garantiza
+      //    legibilidad sin tapar la ornamentación del marco
+      ctx.save();
+      ctx.globalAlpha = 0.62;
+      ctx.fillStyle = '#050814';
+      const padInner = R * 0.025;
+      const radInner = R * 0.030;
+      this.roundRect(ctx, ix+padInner, iy+padInner, iw-2*padInner, ih-2*padInner, radInner);
+      ctx.fill();
+      ctx.globalAlpha = 0.20;
+      ctx.strokeStyle = 'rgba(251,191,36,0.6)';
+      ctx.lineWidth = Math.max(1, R*0.0022);
+      this.roundRect(ctx, ix+padInner, iy+padInner, iw-2*padInner, ih-2*padInner, radInner);
+      ctx.stroke();
+      ctx.restore();
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // LAYOUT — landscape: header superior + 4 QR-links + QR de entrada + footer
+      // ═══════════════════════════════════════════════════════════════════════
+      const fs = (factor, min = 7) => Math.max(min, Math.round(R * factor * 10) / 10);
+
+      // ── 5. Sello + título (área superior) ──
+      const headerY = iy + ih * 0.06;
       try {
         const sym = await this.loadImg('simbolo_starseed.png');
-        const symW = 140, symH = symW * (sym.naturalHeight / sym.naturalWidth);
-        ctx.drawImage(sym, W/2 - symW/2, 60, symW, symH);
+        const symW = R * 0.075;
+        const symH = symW * (sym.naturalHeight / sym.naturalWidth);
+        ctx.drawImage(sym, cx - symW/2, headerY - symH/2, symW, symH);
       } catch {}
 
-      // ── 4. Cabeceras ──
       ctx.fillStyle = 'rgba(251,191,36,0.92)';
-      ctx.font = '700 18px Orbitron, sans-serif';
-      this.drawSpaced(ctx, 'SOCIEDAD STARSEED', W/2, 230, 6);
+      ctx.font = `700 ${fs(0.024)}px Orbitron, sans-serif`;
+      this.drawSpaced(ctx, 'SOCIEDAD STARSEED', cx, headerY + R*0.075, fs(0.024)*0.30);
 
-      ctx.fillStyle = 'rgba(255,255,255,0.96)';
-      ctx.font = '900 38px Orbitron, sans-serif';
-      this.drawSpaced(ctx, 'EVENTO MANIFIESTO', W/2, 270, 5);
+      ctx.fillStyle = 'rgba(255,255,255,0.97)';
+      ctx.font = `900 ${fs(0.040)}px Orbitron, sans-serif`;
+      this.drawSpaced(ctx, 'EVENTO MANIFIESTO · REVERSO', cx, headerY + R*0.130, fs(0.040)*0.10);
 
       ctx.fillStyle = 'rgba(52,211,153,0.92)';
-      ctx.font = 'italic 600 24px "Cormorant Garamond", serif';
-      ctx.fillText('"Deja de sobrevivir. Atrévete a vivir."', W/2, 310);
+      ctx.font = `italic 600 ${fs(0.030)}px "Cormorant Garamond", serif`;
+      ctx.fillText('"Deja de sobrevivir. Atrévete a vivir."', cx, headerY + R*0.180);
 
-      // Línea divisoria
-      ctx.strokeStyle = 'rgba(251,191,36,0.32)';
-      ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(W*0.18, 340); ctx.lineTo(W*0.82, 340); ctx.stroke();
-      ctx.fillStyle = 'rgba(251,191,36,0.95)';
-      ctx.beginPath(); ctx.arc(W/2, 340, 3, 0, Math.PI*2); ctx.fill();
+      // Datos del evento (FECHA · UBICACIÓN · HORA) en una línea
+      const dataY = headerY + R*0.235;
+      ctx.fillStyle = 'rgba(167,139,250,0.85)';
+      ctx.font = `600 ${fs(0.020)}px Orbitron, sans-serif`;
+      this.drawSpaced(ctx, '31 MAYO 2026  ·  CUERNAVACA, MORELOS  ·  16:00 HRS', cx, dataY, fs(0.020)*0.18);
 
-      // ── 5. Datos del evento (3 columnas FECHA · UBICACIÓN · HORA + agenda) ──
-      const colY = 380;
-      const cols = [
-        { l:'FECHA',     v:'31 MAYO 2026' },
-        { l:'UBICACIÓN', v:'CUERNAVACA, MORELOS' },
-        { l:'INICIO',    v:'16:00 HRS' },
-      ];
-      cols.forEach((c, i) => {
-        const cx = W * (0.20 + i*0.30);
-        ctx.fillStyle = 'rgba(16,185,129,0.85)';
-        ctx.font = '600 13px Orbitron, sans-serif';
-        this.drawSpaced(ctx, c.l, cx, colY, 3);
-        ctx.fillStyle = 'rgba(255,255,255,0.96)';
-        ctx.font = '700 18px Orbitron, sans-serif';
-        ctx.fillText(c.v, cx, colY + 28);
-      });
-
-      // ── 6. Convocatoria texto completo ──
-      const convoY = 450;
-      ctx.fillStyle = 'rgba(251,191,36,0.85)';
-      ctx.font = '700 12px Orbitron, sans-serif';
-      this.drawSpaced(ctx, 'LA CONVOCATORIA', W/2, convoY, 4);
-      ctx.fillStyle = 'rgba(255,255,255,0.85)';
-      ctx.font = 'italic 500 17px "Cormorant Garamond", serif';
-      const convo = [
-        'Una convocatoria para creadores, soñadores y pioneros',
-        'que construirán juntos una civilización basada en la',
-        'abundancia, la cooperación y la consciencia.'
-      ];
-      convo.forEach((line, i) => ctx.fillText(line, W/2, convoY + 30 + i*24));
-
-      // ── 7. Agenda corta del evento ──
-      const agendaY = 590;
-      ctx.fillStyle = 'rgba(6,182,212,0.92)';
-      ctx.font = '700 13px Orbitron, sans-serif';
-      this.drawSpaced(ctx, 'AGENDA · 4 ACTOS', W/2, agendaY, 4);
-      const agenda = [
-        ['16:00', 'Apertura · Ceremonia de la Semilla'],
-        ['17:30', 'Ontocracia · Conversatorio en círculo'],
-        ['19:00', 'Abundancia + Hábitat · Plan compartido'],
-        ['21:00', 'Cierre · Concierto y red de Sanghas'],
-      ];
-      agenda.forEach((row, i) => {
-        const y = agendaY + 30 + i*30;
-        ctx.fillStyle = 'rgba(251,191,36,0.92)';
-        ctx.font = '700 14px Orbitron, sans-serif';
-        ctx.textAlign = 'right';
-        ctx.fillText(row[0], W*0.30, y);
-        ctx.fillStyle = 'rgba(255,255,255,0.85)';
-        ctx.font = '500 14px Inter, sans-serif';
-        ctx.textAlign = 'left';
-        ctx.fillText(row[1], W*0.34, y);
-      });
+      // ── 6. 4 QR-LINKS en fila horizontal ──
+      const qrRowY = iy + ih * 0.42;
+      const qrSize = R * 0.20;
+      const qrGap  = (iw - 4*qrSize) / 5;          // 5 huecos = 4 QRs
       ctx.textAlign = 'center';
 
-      // ── 8. Bloque QR-LINKS (4 enlaces principales en grid 2×2) ──
-      const linkY = 740;
-      ctx.fillStyle = 'rgba(167,139,250,0.92)';
-      ctx.font = '700 13px Orbitron, sans-serif';
-      this.drawSpaced(ctx, 'CONÉCTATE CON LA RED', W/2, linkY, 4);
-
-      const qrSize = 92;
-      const cellW = W * 0.40;
-      const cellH = 110;
-      const startX = W*0.10;
-      const startY = linkY + 30;
-      for (let i=0; i<4; i++){
-        const col = i % 2, row = Math.floor(i/2);
-        const cx = startX + col*cellW;
-        const cy = startY + row*cellH;
+      for (let i = 0; i < 4; i++) {
         const link = this.LINKS[i];
-        // QR
-        const qrUrl = this.qrDataURL(link.url);
+        const qx = ix + qrGap + i * (qrSize + qrGap);
+        const qy = qrRowY - qrSize/2;
+
+        // Marco del QR
+        const qPad = qrSize * 0.04;
+        ctx.fillStyle = '#fff';
+        this.roundRect(ctx, qx - qPad, qy - qPad, qrSize + 2*qPad, qrSize + 2*qPad, qrSize*0.06);
+        ctx.fill();
+
+        // QR real
+        const qrUrl = this.qrDataURL(link.url, 6, 6);
         if (qrUrl) {
           try {
             const im = await this.loadImg(qrUrl);
-            // Background blanco para legibilidad del QR
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(cx, cy, qrSize, qrSize);
-            ctx.drawImage(im, cx, cy, qrSize, qrSize);
+            ctx.drawImage(im, qx, qy, qrSize, qrSize);
           } catch {
-            ctx.fillStyle = '#1a1f33'; ctx.fillRect(cx, cy, qrSize, qrSize);
+            ctx.fillStyle = '#0a0f1d';
+            ctx.fillRect(qx, qy, qrSize, qrSize);
           }
-        } else {
-          ctx.fillStyle = '#1a1f33'; ctx.fillRect(cx, cy, qrSize, qrSize);
-          ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-          ctx.strokeRect(cx, cy, qrSize, qrSize);
         }
-        // Label + descripción a la derecha del QR
-        const tx = cx + qrSize + 12;
-        ctx.fillStyle = 'rgba(251,191,36,0.92)';
-        ctx.font = '700 12px Orbitron, sans-serif';
-        ctx.textAlign = 'left';
-        this.drawSpaced(ctx, link.label, tx, cy + 12, 2.5);
-        ctx.fillStyle = 'rgba(255,255,255,0.78)';
-        ctx.font = '500 10.5px Inter, sans-serif';
-        const wrap = this.wrap(ctx, link.desc, cellW - qrSize - 24);
-        wrap.slice(0,2).forEach((ln, k) => ctx.fillText(ln, tx, cy + 32 + k*14));
-        ctx.fillStyle = 'rgba(6,182,212,0.65)';
-        ctx.font = '500 9px "JetBrains Mono", monospace';
-        const shortUrl = link.url.replace(/^https?:\/\//,'').slice(0, 30);
-        ctx.fillText(shortUrl, tx, cy + qrSize - 6);
+
+        // Etiqueta debajo
+        ctx.fillStyle = 'rgba(251,191,36,0.95)';
+        ctx.font = `700 ${fs(0.018)}px Orbitron, sans-serif`;
+        this.drawSpaced(ctx, link.label, qx + qrSize/2, qy + qrSize + qPad + R*0.025, fs(0.018)*0.18);
+
+        ctx.fillStyle = 'rgba(255,255,255,0.65)';
+        ctx.font = `500 ${fs(0.014)}px Inter, sans-serif`;
+        const desc = this.wrap(ctx, link.desc, qrSize + 2*qPad + qrGap*0.4);
+        desc.slice(0, 2).forEach((ln, k) =>
+          ctx.fillText(ln, qx + qrSize/2, qy + qrSize + qPad + R*0.052 + k*R*0.020)
+        );
       }
-      ctx.textAlign = 'center';
 
-      // ── 9. QR ENTRADA único + NODE id ──
-      const entryY = 1010;
+      // ── 7. CÓDIGO DE ENTRADA (QR único + NODE id) en franja inferior ──
+      const entryY = iy + ih * 0.85;
       ctx.fillStyle = 'rgba(220,38,38,0.95)';
-      ctx.font = '900 14px Orbitron, sans-serif';
-      this.drawSpaced(ctx, 'CÓDIGO DE ENTRADA', W/2, entryY, 5);
+      ctx.font = `900 ${fs(0.024)}px Orbitron, sans-serif`;
+      this.drawSpaced(ctx, 'CÓDIGO DE ENTRADA', cx, entryY - R*0.070, fs(0.024)*0.22);
 
-      const entrySize = 110;
-      const entryQRX = W*0.28 - entrySize/2;
-      const entryQRY = entryY + 22;
+      const entrySize = R * 0.18;
+      const entryX = ix + iw * 0.28 - entrySize/2;
+      const entryQy = entryY - entrySize/2;
+
+      // Marco blanco para el QR de entrada
+      const ePad = entrySize * 0.05;
+      ctx.fillStyle = '#fff';
+      this.roundRect(ctx, entryX - ePad, entryQy - ePad, entrySize + 2*ePad, entrySize + 2*ePad, entrySize*0.06);
+      ctx.fill();
+
       const entryPayload = JSON.stringify({
         node: ud.id || 'NO-ID',
         name: ud.name || '',
         role: ud.roleId || '',
-        ts: ud.timestamp || new Date().toISOString(),
-        evt: 'EM-StarSeed-2026',
+        ts:   ud.timestamp || new Date().toISOString(),
+        evt:  'EM-StarSeed-2026',
       });
       const entryQR = this.qrDataURL(entryPayload, 8, 8);
       if (entryQR) {
         try {
           const im = await this.loadImg(entryQR);
-          ctx.fillStyle = '#fff';
-          ctx.fillRect(entryQRX-6, entryQRY-6, entrySize+12, entrySize+12);
-          ctx.drawImage(im, entryQRX, entryQRY, entrySize, entrySize);
+          ctx.drawImage(im, entryX, entryQy, entrySize, entrySize);
         } catch {}
       }
-      // NODE id + nombre del titular a la derecha del QR de entrada
-      const eRX = W*0.45;
+
+      // NODE id + nombre a la derecha del QR de entrada
+      const eRX = ix + iw * 0.50;
       ctx.fillStyle = 'rgba(255,255,255,0.55)';
-      ctx.font = '600 11px Orbitron, sans-serif';
+      ctx.font = `600 ${fs(0.018)}px Orbitron, sans-serif`;
       ctx.textAlign = 'left';
-      this.drawSpaced(ctx, 'NODE', eRX, entryY + 30, 3);
+      this.drawSpaced(ctx, 'NODE', eRX, entryY - R*0.040, fs(0.018)*0.20);
+
       ctx.fillStyle = 'rgba(251,191,36,1)';
-      ctx.font = '900 22px "JetBrains Mono", monospace';
-      ctx.fillText(ud.id || '---', eRX, entryY + 56);
-      ctx.fillStyle = 'rgba(255,255,255,0.78)';
-      ctx.font = '600 14px Inter, sans-serif';
+      ctx.font = `900 ${fs(0.030)}px "JetBrains Mono", monospace`;
+      ctx.fillText(ud.id || '---', eRX, entryY);
+
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.font = `600 ${fs(0.020)}px Inter, sans-serif`;
       const titular = (ud.name || 'INVITADO').toUpperCase();
-      ctx.fillText(titular.length > 24 ? titular.slice(0,24)+'…' : titular, eRX, entryY + 82);
-      ctx.fillStyle = 'rgba(255,255,255,0.50)';
-      ctx.font = '500 11px Inter, sans-serif';
-      ctx.fillText('Escanea este código en la entrada', eRX, entryY + 102);
-      ctx.fillText('para validar tu acceso al evento.', eRX, entryY + 118);
+      ctx.fillText(titular.length > 32 ? titular.slice(0,32)+'…' : titular, eRX, entryY + R*0.040);
+
+      ctx.fillStyle = 'rgba(255,255,255,0.45)';
+      ctx.font = `500 ${fs(0.016)}px Inter, sans-serif`;
+      ctx.fillText('Escanea para validar tu acceso al recinto', eRX, entryY + R*0.072);
       ctx.textAlign = 'center';
 
-      // ── 10. Footer ──
-      ctx.fillStyle = 'rgba(255,255,255,0.32)';
-      ctx.font = '500 10px "JetBrains Mono", monospace';
-      ctx.fillText('✦ Sociedad StarSeed · Fase Semilla · 2026 ✦', W/2, H - 24);
+      // ── 8. Footer ──
+      ctx.fillStyle = 'rgba(255,255,255,0.45)';
+      ctx.font = `500 ${fs(0.014)}px "JetBrains Mono", monospace`;
+      ctx.fillText('✦ Sociedad StarSeed · Fase Semilla · 2026 ✦', cx, iy + ih - R*0.020);
 
       const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
       const dataUrl = canvas.toDataURL('image/png');
       return { blob, dataUrl };
+    },
+
+    /* Helper: rounded rectangle path */
+    roundRect(ctx, x, y, w, h, r){
+      r = Math.max(0, Math.min(r, Math.min(w,h)/2));
+      ctx.beginPath();
+      ctx.moveTo(x+r, y);
+      ctx.arcTo(x+w, y, x+w, y+h, r);
+      ctx.arcTo(x+w, y+h, x, y+h, r);
+      ctx.arcTo(x, y+h, x, y, r);
+      ctx.arcTo(x, y, x+w, y, r);
+      ctx.closePath();
     },
 
     /* Marco ornamental sintetizado: combina líneas geométricas en oro,
@@ -3829,7 +4090,26 @@
         return { ok:true, txnId, status:'paid', method:'promo' };
       }
 
-      // ── MercadoPago Checkout Pro (producción con credenciales) ───────────
+      // ── MercadoPago Tu Link (modo recomendado · gratuito · sin Edge Fn) ──
+      // El link tiene todos los métodos de pago integrados (tarjeta, OXXO, SPEI…)
+      // y MP gestiona el cobro. La confirmación es semi-manual: el registro
+      // queda como 'pending_mp' hasta que se confirma el ingreso al admin.
+      if (SS_CFG.MP_PAYMENT_LINK) {
+        // Guardar datos del pendiente para entregar el boleto al confirmar
+        sessionStorage.setItem('ss_pending_txn', JSON.stringify({
+          txnId, status:'pending_mp', amount, userData: JSON.stringify(userData)
+        }));
+        // Abrir el link en una pestaña nueva (mejor que reemplazar la página
+        // — el usuario sigue viendo su confirmación local con su NODE)
+        window.open(SS_CFG.MP_PAYMENT_LINK, '_blank', 'noopener');
+        return {
+          ok:true, txnId,
+          status:'pending_mp', method:'mp_link',
+          paymentLink: SS_CFG.MP_PAYMENT_LINK,
+        };
+      }
+
+      // ── MercadoPago Checkout Pro vía Edge Function (alternativa avanzada) ──
       const edgeFn = SS_CFG.SUPABASE_URL
         ? `${SS_CFG.SUPABASE_URL}/functions/v1/create-mp-preference`
         : null;
@@ -3851,7 +4131,6 @@
         });
         if (!resp.ok) throw new Error(`MP preference HTTP ${resp.status}`);
         const { init_point } = await resp.json();
-        // Guardar datos del pendiente: al regresar de MP los recuperamos
         sessionStorage.setItem('ss_pending_txn', JSON.stringify({
           txnId, status:'pending_mp', amount, userData: JSON.stringify(userData)
         }));
@@ -4195,12 +4474,17 @@
           userData,
         });
         if (!charge.ok) throw new Error('Pago rechazado');
-        // Si es redirect MP (pending_mp), el flujo continúa al volver a la página
-        if (charge.status === 'pending_mp') return;
+        // method 'mp' (Edge Function) hace redirect → no continuamos aquí
+        // method 'mp_link' abre MP en pestaña nueva → SÍ continuamos para
+        // mostrar la confirmación local con el NODE y el boleto en preview
       } catch(e) {
         btn.classList.remove('loading'); btn.disabled = false;
         if (mpBtn) mpBtn.classList.remove('loading');
         Toast.show('Error al iniciar pago: ' + e.message, {err:true});
+        return;
+      }
+      if (charge.method === 'mp' && charge.status === 'pending_mp') {
+        // Edge Function flow — la página redirige; nada más que hacer aquí
         return;
       }
 
@@ -4256,7 +4540,9 @@
       document.getElementById('confirm-role').textContent = `${roleEmojis} ${userData.roleLabel}`;
       Toast.show(charge.status === 'paid'
         ? '✦ Pago confirmado · NODE ' + nodeId
-        : '✦ Registro creado · pago pendiente de confirmación');
+        : charge.method === 'mp_link'
+          ? '✦ Te abrimos MercadoPago. Cuando se confirme tu pago, recibirás tu boleto definitivo.'
+          : '✦ Registro creado · pago pendiente de confirmación');
 
       Cupo.refresh();
 
@@ -4266,6 +4552,63 @@
       // 9. Envíos automáticos
       if (sendEmail) setTimeout(() => ShareManager.email({auto:true}), 900);
       if (sendWhatsApp) setTimeout(() => ShareManager.whatsapp({auto:true}), 1300);
+
+      // 10. Crear cuenta StarSeed si el usuario lo solicitó
+      const wantsAccount = document.getElementById('f-create-account')?.checked;
+      if (wantsAccount) {
+        const pwd  = document.getElementById('f-password').value;
+        const pwd2 = document.getElementById('f-password2').value;
+        if (!pwd || pwd.length < 6) {
+          Toast.show('Cuenta no creada · contraseña mínima 6 caracteres', {err:true});
+        } else if (pwd !== pwd2) {
+          Toast.show('Cuenta no creada · las contraseñas no coinciden', {err:true});
+        } else {
+          try {
+            await Accounts.createAccount({
+              email, password: pwd, nodeId,
+              profile: {
+                name, whatsapp: wa, comment,
+                nodeId,
+                roleIds: [...selectedRoles],
+                roleId: primaryRoleId,
+                roleLabel: allRoleLabels.join(' · '),
+                rolePrimaryLabel: roleObj.label,
+                roleColor: roleObj.color,
+                frameCategory, frameFile: userData.frameFile,
+                colors: [...userColors],
+                timestamp: userData.timestamp,
+                donation: {
+                  amount: dn.finalAmount, baseAmount: dn.baseAmount,
+                  method: charge.method, status: charge.status,
+                  txnId: charge.txnId,
+                },
+              },
+            });
+            Toast.show('✦ Cuenta StarSeed creada · ya estás dentro de la red');
+          } catch(e) {
+            Toast.show('Cuenta no creada: ' + e.message, {err:true});
+          }
+        }
+      } else if (Accounts.current()) {
+        // Si ya hay sesión activa, vincular este boleto al perfil existente
+        Accounts.updateProfile({
+          nodeId,
+          name, whatsapp: wa, comment,
+          roleIds: [...selectedRoles],
+          roleId: primaryRoleId,
+          roleLabel: allRoleLabels.join(' · '),
+          rolePrimaryLabel: roleObj.label,
+          roleColor: roleObj.color,
+          frameCategory, frameFile: userData.frameFile,
+          colors: [...userColors],
+          timestamp: userData.timestamp,
+          donation: {
+            amount: dn.finalAmount, baseAmount: dn.baseAmount,
+            method: charge.method, status: charge.status,
+            txnId: charge.txnId,
+          },
+        });
+      }
     }
   };
 
@@ -4298,74 +4641,168 @@
     }
   };
 
-  /* ═══════ SHARE MANAGER (envío simulado por ahora) ═══════ */
+  /* ═══════ SHARE MANAGER · envío real via Web Share API ═══════
+     Estrategia:
+       1. Si el dispositivo soporta Web Share API con archivos (móviles modernos):
+          → Comparte FRENTE + REVERSO + texto en una sola acción nativa
+            (WhatsApp, Mail, Telegram, Messages, Drive… aparecen como opciones).
+       2. Si no: descarga ambos PNGs y abre el cliente pre-rellenado.
+     Nota: el navegador NO permite adjuntar archivos a un mailto: por seguridad —
+     ese es un límite del estándar. Para email automatizado real usaríamos un
+     backend (Resend/EmailJS/CF Worker) — el hook está en place via
+     SS_CFG.EMAIL_FUNCTION_URL si se configura más adelante. */
   const ShareManager = {
     _buildMessage(){
-      return `🌟 *Evento Manifiesto · Sociedad StarSeed* 🌟\n\n¡Hola! Soy *${userData.name}* y he confirmado mi asistencia al Evento Manifiesto.\n\n🎯 Mi aportación: ${userData.roleLabel}\n${userData.comment ? `💬 "${userData.comment}"\n` : ''}\n📅 Fecha: ${EVENT.dateStr}\n📍 Ubicación: ${EVENT.cityStr}\n⏰ Hora: ${EVENT.timeStr}\n\n🌐 ${EVENT.url}\n📸 @sociedad.starseed\n\nID: ${userData.id}\n\n${EVENT.summaryShort}\n\n✦ "Deja de sobrevivir. Atrévete a vivir." ✦`;
+      return [
+        '🌟 *Evento Manifiesto · Sociedad StarSeed* 🌟',
+        '',
+        `¡Hola! Soy *${userData.name}* y he confirmado mi asistencia al Evento Manifiesto.`,
+        '',
+        `🎯 Mi aportación: ${userData.roleLabel}`,
+        userData.comment ? `💬 "${userData.comment}"` : null,
+        '',
+        `📅 Fecha: ${EVENT.dateStr}`,
+        `📍 Ubicación: ${EVENT.cityStr}`,
+        `⏰ Hora: ${EVENT.timeStr}`,
+        '',
+        '🌐 Web oficial: https://starseed-c4b17.web.app/',
+        '📸 Instagram: @sociedad.starseed',
+        '🎟️  Invitación: https://tinyurl.com/eventostarseed',
+        '',
+        `🆔 NODE: ${userData.id}`,
+        '',
+        EVENT.summaryShort,
+        '',
+        '✦ "Deja de sobrevivir. Atrévete a vivir." ✦',
+      ].filter(Boolean).join('\n');
     },
 
-    /* Descarga el PNG + abre cliente pre-rellenado.
-       NOTA: En producción, reemplazar por llamada a backend (EmailJS / Resend / CF Worker)
-       que envíe el adjunto desde el servidor. Hook: window.__StarSeedSend = async ({channel,payload}) => ... */
-    whatsapp(opts={}){
-      // 1. Garantizar descarga del PNG
-      if (ticketBlob) TicketCanvas.download();
-
-      // 2. Intentar Web Share API si el navegador lo soporta con archivos (móvil)
-      if (ticketBlob && navigator.canShare && navigator.canShare({ files:[new File([ticketBlob],'pase.png',{type:'image/png'})] })) {
-        navigator.share({
-          title: EVENT.name,
-          text: this._buildMessage().replace(/\*/g,''),
-          files: [new File([ticketBlob], `PASE_STARSEED_${(userData.name||'').replace(/[^a-zA-Z0-9]/g,'_')}.png`, { type:'image/png' })]
-        }).then(()=>Toast.show('📱 Compartido exitosamente')).catch(()=>this._whatsappFallback(opts));
-        return;
+    /* Genera File objects de frente + reverso para Web Share API.
+       El reverso se forja en vivo si aún no existe. */
+    async _buildFiles(){
+      const safe = (userData.name || 'invitado').replace(/[^a-zA-Z0-9]/g,'_').toUpperCase();
+      const files = [];
+      if (ticketBlob) {
+        files.push(new File([ticketBlob], `PASE_STARSEED_${safe}_FRENTE.png`, { type:'image/png' }));
       }
-      this._whatsappFallback(opts);
+      let backBlob = ticketBackBlob;
+      if (!backBlob) {
+        try {
+          const back = await TicketBack.generate(userData);
+          backBlob = back.blob;
+          ticketBackBlob = back.blob;
+          ticketBackDataURL = back.dataUrl;
+        } catch(e){ console.warn('[Share] back gen failed:', e); }
+      }
+      if (backBlob) {
+        files.push(new File([backBlob], `PASE_STARSEED_${safe}_REVERSO.png`, { type:'image/png' }));
+      }
+      return files;
     },
 
-    _whatsappFallback(opts={}){
-      const msg = encodeURIComponent(this._buildMessage());
+    /* Comparte vía Web Share API (con archivos si el navegador lo permite).
+       Funciona en iOS/Android modernos · macOS Safari · Chrome desktop reciente. */
+    async _nativeShare(channelHint = ''){
+      const files = await this._buildFiles();
+      if (!files.length) return false;
+      // Algunos navegadores requieren chequeo de canShare antes de share()
+      if (navigator.canShare && navigator.canShare({ files })) {
+        try {
+          await navigator.share({
+            title: EVENT.name,
+            text:  this._buildMessage().replace(/\*/g,''),
+            files,
+          });
+          Toast.show(`✦ Boleto compartido${channelHint ? ' por ' + channelHint : ''}`);
+          return true;
+        } catch (err) {
+          // Usuario canceló o rechazo del SO — caer al fallback
+          if (err.name !== 'AbortError') console.warn('[Share] native failed:', err);
+          return false;
+        }
+      }
+      return false;
+    },
+
+    async whatsapp(opts={}){
+      // 1. Web Share nativo (mejor experiencia · adjunta archivos)
+      const ok = await this._nativeShare('WhatsApp');
+      if (ok) return;
+
+      // 2. Fallback desktop: descargar PNGs + abrir WhatsApp Web/App con texto
+      if (ticketBlob) TicketCanvas.download();
+      const msg   = encodeURIComponent(this._buildMessage());
       const phone = userData.whatsapp ? userData.whatsapp.replace(/\D/g,'') : '';
-      const url = phone
+      const url   = phone
         ? `https://api.whatsapp.com/send?phone=${phone}&text=${msg}`
         : `https://api.whatsapp.com/send?text=${msg}`;
       window.open(url, '_blank');
-      Toast.show(opts.auto ? '📱 WhatsApp preparado (simulado)' : '📱 Abriendo WhatsApp... adjunta manualmente el PNG descargado');
+      Toast.show(opts.auto
+        ? '📱 WhatsApp listo · adjunta los 2 PNGs descargados'
+        : '📱 Abriendo WhatsApp · adjunta los 2 PNGs descargados (frente + reverso)');
     },
 
-    email(opts={}){
+    async email(opts={}){
+      // 1. Web Share nativo (algunos sistemas ofrecen Mail directamente)
+      const ok = await this._nativeShare('Mail');
+      if (ok) return;
+
+      // 2. Backend opcional configurado (Resend / EmailJS / CF Worker)
+      if (SS_CFG.EMAIL_FUNCTION_URL) {
+        try {
+          const fd = new FormData();
+          fd.append('to', userData.email);
+          fd.append('subject', `Mi Pase — ${EVENT.name}`);
+          fd.append('body', this._buildMessage().replace(/\*/g,''));
+          if (ticketBlob)     fd.append('frente', ticketBlob, 'frente.png');
+          if (ticketBackBlob) fd.append('reverso', ticketBackBlob, 'reverso.png');
+          const r = await fetch(SS_CFG.EMAIL_FUNCTION_URL, { method:'POST', body: fd });
+          if (r.ok) { Toast.show('📧 Boleto enviado a ' + userData.email); return; }
+        } catch(e){ console.warn('[Share] email backend failed:', e); }
+      }
+
+      // 3. Fallback universal: descargar PNGs + abrir cliente con texto
       if (ticketBlob) TicketCanvas.download();
       const subject = encodeURIComponent(`Mi Pase — ${EVENT.name}`);
-      const body = encodeURIComponent(this._buildMessage().replace(/\*/g,''));
+      const body    = encodeURIComponent(this._buildMessage().replace(/\*/g,''));
       window.open(`mailto:${userData.email}?subject=${subject}&body=${body}`, '_blank');
-      Toast.show(opts.auto ? '📧 Email preparado (simulado)' : '📧 Abriendo correo... adjunta el PNG descargado');
-
-      /* Futuro: integración real
-      if (window.__StarSeedSend) {
-        window.__StarSeedSend({ channel:'email', payload:{
-          to: userData.email, subject: `Mi Pase — ${EVENT.name}`,
-          body: this._buildMessage(), attachmentBlob: ticketBlob, fileName:'pase.png'
-        }});
-      }
-      */
+      Toast.show(opts.auto
+        ? '📧 Cliente de email abierto · adjunta los 2 PNGs descargados'
+        : '📧 Abriendo correo · adjunta los 2 PNGs (frente + reverso)');
     }
   };
 
-  /* ═══════ PDF GENERATOR (versión alterna para imprenta) ═══════ */
+  /* ═══════ PDF GENERATOR — 2 páginas (frente + reverso) ═══════ */
   const PDFGen = {
     async generate(){
       try {
         if (!ticketDataURL) { Toast.show('Forja primero tu pase...', {err:true}); return; }
         const { jsPDF } = window.jspdf;
         if (!jsPDF) { Toast.show('jsPDF no disponible', {err:true}); return; }
-        // A6 aprox: 105x148, mejor cuadrado 148x148 en A5
-        const size = 148;
-        const doc = new jsPDF({ unit:'mm', format:[size,size], orientation:'portrait', compress:true });
-        // PDF sin fondo opaco — el PNG del boleto ya trae su propio marco.
-        doc.addImage(ticketDataURL, 'PNG', 0, 0, size, size, undefined, 'FAST');
+
+        // ── 1. Frente: cuadrado A5 (148×148mm) ──
+        const sizeFront = 148;
+        const doc = new jsPDF({ unit:'mm', format:[sizeFront, sizeFront], orientation:'portrait', compress:true });
+        doc.addImage(ticketDataURL, 'PNG', 0, 0, sizeFront, sizeFront, undefined, 'FAST');
+
+        // ── 2. Reverso: landscape (148×80mm aprox · proporción del back image) ──
+        let backDataURL = ticketBackDataURL;
+        if (!backDataURL) {
+          try {
+            const back = await TicketBack.generate(userData);
+            backDataURL = back.dataUrl;
+          } catch(e) { console.warn('[PDFGen] back gen failed:', e); }
+        }
+        if (backDataURL) {
+          const wMM = sizeFront;
+          const hMM = Math.round(sizeFront * (768/1408));   // proporción nativa del back
+          doc.addPage([wMM, hMM], 'landscape');
+          doc.addImage(backDataURL, 'PNG', 0, 0, wMM, hMM, undefined, 'FAST');
+        }
+
         const safe = (userData.name || 'invitado').replace(/[^a-zA-Z0-9]/g,'_').toUpperCase();
         doc.save(`PASE_STARSEED_${safe}.pdf`);
-        Toast.show('📄 PDF generado');
+        Toast.show('📄 PDF generado · 2 páginas (frente + reverso)');
       } catch(err){ console.error(err); Toast.show('Error generando PDF: '+err.message, {err:true}); }
     }
   };
@@ -4423,6 +4860,279 @@
       });
     };
     return { init };
+  })();
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     ACCOUNTS · Cuenta StarSeed con login local + sync con Supabase
+     ─────────────────────────────────────────────────────────────────────────
+     Almacenamiento local (privado, este dispositivo):
+       starseed_accounts_v1   → { [email]: { passwordHash, salt, profile, ... } }
+       starseed_session_v1    → { email, expiresAt, nodeId }
+
+     Privacy-first: el password se hashea con SHA-256 + salt único antes de
+     guardarse, jamás se transmite ni se almacena en plaintext.
+
+     La cuenta sincroniza con Supabase via Registry.pushRemote (tabla tickets).
+     A futuro se conectará al sistema operativo social descentralizado StarSeed
+     vía la tabla `profiles` que ya existe en el proyecto.
+     ═══════════════════════════════════════════════════════════════════════ */
+  const Accounts = (() => {
+    const ACC_KEY = 'starseed_accounts_v1';
+    const SES_KEY = 'starseed_session_v1';
+    const SES_DAYS = 90;
+
+    // Crypto helpers ────────────────────────────────────────────────────────
+    function _bytesToHex(buf){
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+    async function _sha256(text){
+      const enc = new TextEncoder().encode(text);
+      const buf = await crypto.subtle.digest('SHA-256', enc);
+      return _bytesToHex(buf);
+    }
+    function _newSalt(){
+      const arr = new Uint8Array(16);
+      crypto.getRandomValues(arr);
+      return _bytesToHex(arr);
+    }
+    async function hashPassword(password, salt){
+      return _sha256(`starseed:v1:${salt}:${password}`);
+    }
+
+    // Storage ────────────────────────────────────────────────────────────────
+    function loadAll(){
+      try { return JSON.parse(localStorage.getItem(ACC_KEY) || '{}'); }
+      catch { return {}; }
+    }
+    function saveAll(obj){ localStorage.setItem(ACC_KEY, JSON.stringify(obj)); }
+    function loadSession(){
+      try {
+        const s = JSON.parse(localStorage.getItem(SES_KEY) || 'null');
+        if (!s || !s.expiresAt || Date.now() > s.expiresAt) return null;
+        return s;
+      } catch { return null; }
+    }
+    function saveSession(email, nodeId){
+      const exp = Date.now() + SES_DAYS*24*60*60*1000;
+      localStorage.setItem(SES_KEY, JSON.stringify({ email, nodeId, expiresAt: exp }));
+    }
+    function clearSession(){ localStorage.removeItem(SES_KEY); }
+
+    // Public API ─────────────────────────────────────────────────────────────
+    async function createAccount({ email, password, profile, nodeId }){
+      if (!email || !password) throw new Error('Email y contraseña requeridos');
+      if (password.length < 6)  throw new Error('Contraseña mínima 6 caracteres');
+      const all = loadAll();
+      const k   = email.toLowerCase().trim();
+      if (all[k]) throw new Error('Ya existe una cuenta con este email — usa Iniciar sesión');
+      const salt = _newSalt();
+      const passwordHash = await hashPassword(password, salt);
+      all[k] = {
+        email: k,
+        passwordHash, salt,
+        profile: profile || {},
+        nodeId: nodeId || null,
+        createdAt: new Date().toISOString(),
+      };
+      saveAll(all);
+      saveSession(k, nodeId);
+      _refreshHeader();
+      return all[k];
+    }
+
+    async function login(email, password){
+      const all = loadAll();
+      const k = email.toLowerCase().trim();
+      const acc = all[k];
+      if (!acc) throw new Error('No existe cuenta con ese correo');
+      const hash = await hashPassword(password, acc.salt);
+      if (hash !== acc.passwordHash) throw new Error('Contraseña incorrecta');
+      saveSession(acc.email, acc.nodeId);
+      _refreshHeader();
+      return acc;
+    }
+
+    function logout(){
+      clearSession();
+      _refreshHeader();
+      closeProfile();
+      Toast.show('Sesión cerrada · ¡vuelve cuando quieras!');
+    }
+
+    function current(){
+      const ses = loadSession();
+      if (!ses) return null;
+      const all = loadAll();
+      return all[ses.email] || null;
+    }
+
+    function updateProfile(partial){
+      const ses = loadSession();
+      if (!ses) return;
+      const all = loadAll();
+      const acc = all[ses.email];
+      if (!acc) return;
+      acc.profile = { ...(acc.profile || {}), ...(partial || {}) };
+      if (partial?.nodeId) { acc.nodeId = partial.nodeId; saveSession(ses.email, partial.nodeId); }
+      acc.updatedAt = new Date().toISOString();
+      saveAll(all);
+      _refreshHeader();
+    }
+
+    // UI control ─────────────────────────────────────────────────────────────
+    function openLogin(){
+      const acc = current();
+      if (acc) { openProfile(); return; }
+      document.getElementById('ov-login').classList.add('open');
+      setTimeout(() => document.getElementById('login-email')?.focus(), 280);
+    }
+    function closeLogin(){ document.getElementById('ov-login').classList.remove('open'); }
+
+    function openProfile(){
+      const acc = current();
+      if (!acc) { openLogin(); return; }
+      _renderProfile(acc);
+      document.getElementById('ov-profile').classList.add('open');
+    }
+    function closeProfile(){ document.getElementById('ov-profile').classList.remove('open'); }
+
+    function _renderProfile(acc){
+      const p = acc.profile || {};
+      document.getElementById('profile-name').textContent  = p.name || acc.email;
+      document.getElementById('profile-role').textContent  = (p.roleLabel || '—').toUpperCase();
+      document.getElementById('profile-node').textContent  = acc.nodeId || p.nodeId || '—';
+      document.getElementById('profile-email').textContent = acc.email;
+      const amt = p.donation?.amount ?? 0;
+      document.getElementById('profile-amount').textContent = '$' + amt + ' MXN';
+      const st = p.donation?.status || '—';
+      const stTxt = st === 'paid' ? '✓ Confirmado'
+                  : st === 'pending_mp' ? '⏳ En revisión'
+                  : st === 'pending' ? '⏳ Pendiente'
+                  : st;
+      document.getElementById('profile-status').textContent = stTxt;
+      const av = document.getElementById('profile-avatar');
+      av.textContent = (p.name || acc.email)[0].toUpperCase();
+    }
+
+    function _refreshHeader(){
+      const btn = document.getElementById('header-login-btn');
+      const lab = document.getElementById('header-login-label');
+      const acc = current();
+      if (!btn || !lab) return;
+      if (acc) {
+        btn.classList.add('is-logged');
+        const first = (acc.profile?.name || acc.email).split(' ')[0];
+        lab.textContent = first.length > 12 ? first.slice(0,12)+'…' : first;
+      } else {
+        btn.classList.remove('is-logged');
+        lab.textContent = 'Iniciar sesión';
+      }
+    }
+
+    // Acciones del perfil ────────────────────────────────────────────────────
+    async function refreshStatus(){
+      // Consulta Supabase por el NODE actual y actualiza el estado local
+      const acc = current(); if (!acc) return;
+      const nodeId = acc.nodeId || acc.profile?.nodeId;
+      if (!nodeId) { Toast.show('No tienes NODE asociado todavía', {err:true}); return; }
+      if (!SS_CFG.SUPABASE_URL || !SS_CFG.SUPABASE_ANON_KEY) {
+        Toast.show('Sin conexión a la red — intenta más tarde', {err:true}); return;
+      }
+      try {
+        const r = await fetch(
+          `${SS_CFG.SUPABASE_URL}/rest/v1/tickets?node_id=eq.${encodeURIComponent(nodeId)}&select=*`,
+          { headers: {
+              'apikey': SS_CFG.SUPABASE_ANON_KEY,
+              'Authorization': 'Bearer ' + SS_CFG.SUPABASE_ANON_KEY,
+            }}
+        );
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const rows = await r.json();
+        const row = rows[0];
+        if (!row) { Toast.show('NODE no encontrado en la red', {err:true}); return; }
+        updateProfile({
+          donation: {
+            amount: Number(row.don_amount) || 0,
+            status: row.don_status || '—',
+            method: row.don_method || '—',
+          },
+        });
+        _renderProfile(current());
+        Toast.show(row.don_status === 'paid'
+          ? '✦ ¡Tu pago está confirmado!'
+          : '✦ Tu pago está en estado: ' + (row.don_status || 'pendiente'));
+      } catch(e) {
+        Toast.show('Error consultando la red: ' + e.message, {err:true});
+      }
+    }
+
+    function viewMyTicket(){
+      const acc = current(); if (!acc) return;
+      const p = acc.profile || {};
+      if (!p.nodeId) { Toast.show('Aún no tienes boleto asociado'); return; }
+      // Restaurar userData global y abrir el boleto en preview
+      userData = {
+        name: p.name, email: acc.email, whatsapp: p.whatsapp, comment: p.comment,
+        roleIds: p.roleIds || [], roleId: p.roleId, roleLabel: p.roleLabel,
+        rolePrimaryLabel: p.rolePrimaryLabel, roleColor: p.roleColor,
+        frameCategory: p.frameCategory, frameFile: p.frameFile,
+        colors: p.colors || [], id: p.nodeId, timestamp: p.timestamp,
+      };
+      closeProfile();
+      RSVP.open();
+      document.getElementById('v-form').style.display    = 'none';
+      document.getElementById('v-confirm').style.display = '';
+      const first = (p.name || 'StarSeed').split(' ')[0];
+      document.getElementById('confirm-name').textContent = `¡Hola, ${first}!`;
+      const roleEmojis = (p.roleIds || []).map(id => ROLES.find(r => r.id === id)?.emoji || '✨').join(' ');
+      document.getElementById('confirm-role').textContent = `${roleEmojis} ${p.roleLabel || ''}`;
+      TicketCanvas.forgeAndPreview();
+    }
+
+    // Init ───────────────────────────────────────────────────────────────────
+    function init(){
+      // Toggle del checkbox en el formulario
+      const cb = document.getElementById('f-create-account');
+      const fields = document.getElementById('account-fields');
+      if (cb && fields) {
+        cb.addEventListener('change', () => {
+          fields.style.display = cb.checked ? '' : 'none';
+        });
+      }
+      // Form de login
+      const loginForm = document.getElementById('login-form');
+      if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = loginForm.querySelector('.auth-submit');
+          btn.classList.add('loading'); btn.disabled = true;
+          try {
+            const email = document.getElementById('login-email').value.trim();
+            const pwd   = document.getElementById('login-password').value;
+            await login(email, pwd);
+            closeLogin();
+            Toast.show('✦ Bienvenido de vuelta a StarSeed');
+            setTimeout(() => openProfile(), 250);
+          } catch(err) {
+            Toast.show(err.message, {err:true});
+          } finally {
+            btn.classList.remove('loading'); btn.disabled = false;
+          }
+        });
+      }
+      // Cerrar overlays al click fuera
+      ['ov-login','ov-profile'].forEach(id => {
+        const ov = document.getElementById(id);
+        if (ov) ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('open'); });
+      });
+      _refreshHeader();
+    }
+
+    return {
+      init, hashPassword, createAccount, login, logout, current, updateProfile,
+      openLogin, closeLogin, openProfile, closeProfile,
+      refreshStatus, viewMyTicket,
+    };
   })();
 
   /* ═══════ RETORNO DESDE MERCADOPAGO ═══════
@@ -4532,6 +5242,7 @@
       RoleGrid.init();
       ColorPicker.init();
       RSVP.init();
+      Accounts.init();
       InfoModal.init();
       Resources.init();
       StickyHeader.init();
